@@ -122,7 +122,6 @@
         var dotsWrap = document.querySelector('[data-slider-dots]');
         if (!track || !items.length) return;
 
-        var GAP = 24;
         var index = 0;
         var perView = 1;
         var maxIndex = 0;
@@ -132,6 +131,22 @@
             if (window.innerWidth >= 992) return 3;
             if (window.innerWidth >= 576) return 2;
             return 1;
+        }
+
+        // Read the gap from CSS so the slide maths follow the responsive
+        // column-gap on .testimonial-track instead of a hard-coded 24px.
+        function getGap() {
+            var gap = parseFloat(window.getComputedStyle(track).columnGap);
+            return isNaN(gap) ? 24 : gap;
+        }
+
+        // clientWidth includes the slider's own padding, which the slides cannot
+        // use — measure the content box so cards never overflow the viewport.
+        function getViewportWidth() {
+            var styles = window.getComputedStyle(slider);
+            return slider.clientWidth
+                - parseFloat(styles.paddingLeft)
+                - parseFloat(styles.paddingRight);
         }
 
         function buildDots() {
@@ -162,7 +177,8 @@
             maxIndex = Math.max(items.length - perView, 0);
             index = Math.min(index, maxIndex);
 
-            var itemWidth = (slider.clientWidth - GAP * (perView - 1)) / perView;
+            var gap = getGap();
+            var itemWidth = (getViewportWidth() - gap * (perView - 1)) / perView;
             items.forEach(function (item) {
                 item.style.width = itemWidth + 'px';
             });
@@ -174,7 +190,7 @@
         function goTo(newIndex) {
             index = Math.max(0, Math.min(newIndex, maxIndex));
             var itemWidth = items[0].getBoundingClientRect().width;
-            track.style.transform = 'translateX(' + (-index * (itemWidth + GAP)) + 'px)';
+            track.style.transform = 'translateX(' + (-index * (itemWidth + getGap())) + 'px)';
             updateDots();
         }
 

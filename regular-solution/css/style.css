@@ -58,7 +58,12 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 120px;
+    /* Clears the sticky navbar when jumping to an anchor. Shrinks with the
+       navbar at the breakpoints in section 21. */
+    scroll-padding-top: 100px;
+    /* Stop iOS inflating text when a phone is rotated to landscape. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 body {
@@ -107,6 +112,16 @@ img {
 
 .section-pad {
     padding: 84px 0;
+}
+
+/* Below sm the .container runs full-bleed with only 12px of padding, which is
+   narrower than the -24px side margins .g-5 applies to a .row — the difference
+   pushed every g-5 section 12px past each edge of the viewport. */
+@media (max-width: 575.98px) {
+    .row.g-5,
+    .row.gx-5 {
+        --bs-gutter-x: 1.5rem;
+    }
 }
 
 .bg-soft {
@@ -374,6 +389,24 @@ textarea:focus-visible,
     background-color: var(--white);
     color: var(--secondary);
     transform: translateY(-3px);
+}
+
+/* Below lg the logo moves out of the topbar and into the sticky navbar, so
+   branding stays on screen while scrolling and the header stops costing a
+   full screen of height. The colour logo needs a light plate on the navy bar. */
+.nav-brand-mobile {
+    margin: 8px 0;
+    padding: 6px 12px;
+    background-color: var(--white);
+    border-radius: var(--radius-sm);
+    line-height: 0;
+}
+
+.nav-brand-mobile img {
+    /* The mark is close to 2:1, so height drives legibility of the wordmark */
+    height: 46px;
+    width: auto;
+    display: block;
 }
 
 .navbar-toggler {
@@ -983,13 +1016,14 @@ textarea:focus-visible,
 
 /* 15. Testimonials slider ================================================= */
 .testimonial-slider {
+    --slider-gap: 24px;
     overflow: hidden;
     padding: 6px 4px 10px;
 }
 
 .testimonial-track {
     display: flex;
-    gap: 24px;
+    gap: var(--slider-gap);
     transition: transform .55s var(--ease);
     will-change: transform;
 }
@@ -1128,6 +1162,25 @@ textarea:focus-visible,
     padding: 0 22px 22px;
     color: var(--muted);
     font-size: .95rem;
+}
+
+/* 16b. Map embed ========================================================== */
+/* A 21:9 map is only ~150px tall on a phone, which is too short to read or
+   pan — the frame gets progressively squarer as the viewport narrows. */
+.map-embed {
+    --bs-aspect-ratio: 42%;
+}
+
+@media (max-width: 991.98px) {
+    .map-embed { --bs-aspect-ratio: 60%; }
+}
+
+@media (max-width: 767.98px) {
+    .map-embed { --bs-aspect-ratio: 80%; }
+}
+
+@media (max-width: 575.98px) {
+    .map-embed { --bs-aspect-ratio: 100%; }
 }
 
 /* 17. Blog cards ========================================================== */
@@ -1423,15 +1476,30 @@ textarea:focus-visible,
 }
 
 /* 21. Responsive refinements ============================================== */
+
+/* Large desktops — the container stops growing at 1320px, so give the
+   vertical rhythm a little more room instead. */
+@media (min-width: 1400px) {
+    .section-pad {
+        padding: 96px 0;
+    }
+
+    .hero {
+        padding: 76px 0 68px;
+    }
+}
+
 @media (max-width: 1199.98px) {
+    /* Between 992px and 1199px the info column is ~616px wide — trimmed just
+       enough to keep all three items on one row instead of orphaning one. */
     .info-list {
-        gap: 20px;
+        gap: 14px;
     }
 
     .info-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.25rem;
+        width: 46px;
+        height: 46px;
+        font-size: 1.15rem;
     }
 
     .info-text .label,
@@ -1452,8 +1520,17 @@ textarea:focus-visible,
 }
 
 @media (max-width: 991.98px) {
+    /* The collapsed navbar is shorter than the desktop one. */
+    html {
+        scroll-padding-top: 88px;
+    }
+
     .section-pad {
         padding: 62px 0;
+    }
+
+    .page-banner {
+        padding: 46px 0;
     }
 
     .topbar {
@@ -1464,10 +1541,42 @@ textarea:focus-visible,
         height: 58px;
     }
 
+    /* Compact contact strip: the icon carries the meaning, so the label is
+       hidden from sight but left in the accessibility tree, and the items
+       wrap two-up instead of stacking three tall rows. */
     .info-list {
         justify-content: flex-start;
-        gap: 16px 26px;
-        margin-top: 16px;
+        gap: 10px 14px;
+        margin-top: 0;
+    }
+
+    .info-item {
+        gap: 8px;
+    }
+
+    .info-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+        box-shadow: 0 5px 12px rgba(70, 119, 232, .28);
+    }
+
+    .info-text .label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    .info-text .value {
+        font-size: .9rem;
+        font-weight: 600;
+        color: var(--secondary);
     }
 
     /* Mobile navbar panel */
@@ -1531,6 +1640,21 @@ textarea:focus-visible,
         bottom: 96px;
         right: 18px;
     }
+
+    .testimonial-slider {
+        --slider-gap: 20px;
+    }
+
+    .blog-body {
+        padding: 20px;
+    }
+
+    /* Comfortable touch targets in the two icon rows */
+    .nav-social a,
+    .footer-social a {
+        width: 44px;
+        height: 44px;
+    }
 }
 
 @media (max-width: 767.98px) {
@@ -1538,18 +1662,39 @@ textarea:focus-visible,
         padding: 52px 0;
     }
 
+    .page-banner {
+        padding: 38px 0;
+    }
+
     .booking-panel {
         padding: 26px 20px;
     }
 
-    .info-item {
-        gap: 10px;
+    .testimonial-slider {
+        --slider-gap: 18px;
+    }
+
+    /* iOS Safari zooms the page when a focused field is under 16px. */
+    .form-control,
+    .form-select {
+        font-size: 1rem;
+    }
+
+    /* Stop long questions colliding with the accordion chevron */
+    .faq-accordion .accordion-button {
+        padding: 18px 18px;
+        column-gap: 14px;
+        font-size: .96rem;
+    }
+
+    .faq-accordion .accordion-body {
+        padding: 0 18px 18px;
     }
 
     .info-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 1.1rem;
+        width: 36px;
+        height: 36px;
+        font-size: .95rem;
     }
 
     .float-download {
@@ -1582,15 +1727,82 @@ textarea:focus-visible,
     }
 }
 
+/* Tablet strip: the .container is pinned to 540px through this whole range, so
+   the three items only clear one line once the text is stepped down slightly.
+   One even row beats two rows with a single orphaned item. */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .info-list {
+        flex-wrap: nowrap;
+        gap: 12px;
+    }
+
+    .info-icon {
+        width: 32px;
+        height: 32px;
+        font-size: .9rem;
+    }
+
+    .info-text .value {
+        font-size: .85rem;
+        white-space: nowrap;
+    }
+}
+
 @media (max-width: 575.98px) {
+    html {
+        scroll-padding-top: 80px;
+    }
+
+    .section-pad {
+        padding: 44px 0;
+    }
+
     .section-head {
         margin-bottom: 34px;
     }
 
+    .testimonial-slider {
+        --slider-gap: 16px;
+    }
+
+    .testimonial-card {
+        padding: 22px 18px;
+    }
+
+    .blog-body {
+        padding: 18px;
+    }
+
+    .btn-lg {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+
+    .footer-bottom {
+        text-align: center;
+    }
+
+    /* One item per line. Wrapping by content width left a lone third item
+       under a half-empty row; a single column keeps every icon and every
+       label on one axis, which reads as deliberate rather than ragged. */
     .info-list {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .info-icon {
+        width: 34px;
+        height: 34px;
+        font-size: .95rem;
+    }
+
+    .topbar {
+        padding: 10px 0;
+    }
+
+    .nav-brand-mobile img {
+        height: 40px;
     }
 
     .service-card,
@@ -1615,5 +1827,142 @@ textarea:focus-visible,
     .float-download {
         max-width: none;
         padding: 12px 14px;
+    }
+}
+
+/* Small phones (iPhone SE / Galaxy A-series and narrower) --------------- */
+@media (max-width: 374.98px) {
+    .service-thumb {
+        width: 88px;
+        height: 88px;
+    }
+
+    .service-thumb img {
+        width: 62px;
+        height: 62px;
+    }
+
+    .info-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .btn,
+    .btn-lg {
+        padding: 11px 18px;
+        font-size: .95rem;
+    }
+
+    /* Two full-width CTAs read better than two cramped ones side by side */
+    .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .booking-panel {
+        padding: 22px 16px;
+    }
+
+    .footer-logo img {
+        height: 46px;
+    }
+}
+
+/* Landscape phones — height, not width, is the scarce resource here ------ */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        padding: 32px 0 28px;
+    }
+
+    .hero-img {
+        max-height: 260px;
+    }
+
+    .section-pad {
+        padding: 40px 0;
+    }
+
+    /* Three floating buttons eat most of a 400px-tall viewport */
+    .float-download {
+        display: none;
+    }
+
+    .float-btn {
+        width: 46px;
+        height: 46px;
+        font-size: 1.2rem;
+    }
+
+    /* A collapsed menu taller than the screen has to scroll */
+    .main-nav .navbar-collapse {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+}
+
+/* Touch devices — bigger hit areas, and no hover states that stick after a
+   tap because a finger never generates a matching mouseleave. ----------- */
+@media (hover: none) and (pointer: coarse) {
+    .footer-links li {
+        margin-bottom: 2px;
+    }
+
+    .footer-links a {
+        padding: 8px 0;
+    }
+
+    /* "Click Here" / "Read More" are the primary card CTAs — pad the 25px
+       text line out to a ~44px tap target. */
+    .link-arrow {
+        padding: 10px 0;
+    }
+
+    .info-text a.value,
+    .footer-contact a {
+        display: inline-block;
+        padding: 8px 0;
+    }
+
+    .footer-contact li {
+        margin-bottom: 8px;
+    }
+
+    /* 10px dots are far too small to tap — extend the hit area past the dot
+       without changing how it looks. */
+    .slider-dots {
+        gap: 14px;
+    }
+
+    .slider-dots button {
+        position: relative;
+    }
+
+    .slider-dots button::after {
+        content: "";
+        position: absolute;
+        inset: -15px -7px;
+    }
+
+    .service-card:hover,
+    .feature-card:hover,
+    .step-card:hover,
+    .blog-card:hover {
+        transform: none;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn:hover,
+    .float-btn:hover,
+    .nav-social a:hover,
+    .footer-social a:hover,
+    .social-row a:hover {
+        transform: none;
+    }
+
+    .service-card:hover .service-thumb img,
+    .blog-card:hover .blog-media img,
+    .feature-card:hover .feature-icon {
+        transform: none;
     }
 }

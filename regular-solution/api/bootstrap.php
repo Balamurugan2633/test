@@ -50,6 +50,25 @@ function rs_fail(string $message, int $status = 400, array $extra = []): void
     rs_json(array_merge(['ok' => false, 'message' => $message], $extra), $status);
 }
 
+/**
+ * True only for a site being served locally (XAMPP, a .test/.local hostname or
+ * a loopback client). Test mode hands the OTP straight back to the browser,
+ * which is fine on a dev machine but would let anyone verify any number on a
+ * public host — so that only ever happens when this returns true.
+ */
+function rs_is_local(): bool
+{
+    // Judged on the hostname the visitor typed, deliberately NOT on
+    // REMOTE_ADDR: behind a reverse proxy (nginx in front of php-fpm) every
+    // real visitor arrives from 127.0.0.1, which would mark production local.
+    $host = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
+    $host = explode(':', $host)[0];
+
+    return in_array($host, ['localhost', '127.0.0.1', '::1', '[::1]'], true)
+        || str_ends_with($host, '.local')
+        || str_ends_with($host, '.test');
+}
+
 /** True when the caller expects JSON back rather than a redirect. */
 function rs_wants_json(): bool
 {

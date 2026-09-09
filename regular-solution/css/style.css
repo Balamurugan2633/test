@@ -612,6 +612,20 @@ textarea:focus-visible,
     .hero-media-col { grid-area: media; }
 }
 
+/* The media cell is a later grid item than the copy cell, so anything that
+   bleeds out of it paints on top of the headline and CTAs. Keep the text and
+   the form on a higher layer so decoration can never cover them. */
+.hero-copy-col,
+.hero-form-col {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-media-col {
+    position: relative;
+    z-index: 1;
+}
+
 .hero-visual {
     position: relative;
     display: flex;
@@ -661,15 +675,20 @@ textarea:focus-visible,
     border-radius: 50%;
 }
 
+/* max-height keeps each circle inside the media cell. Without it a 540px ring
+   centred in a shorter box spills 25-37px above the cell and sits over the
+   hero CTAs; aspect-ratio reduces the width to match, so they stay round. */
 .hero-ring.r1 {
     width: min(540px, 96%);
     aspect-ratio: 1;
+    max-height: 100%;
     background: radial-gradient(circle at 50% 45%, #dde7fd 0%, #e8effb 58%, rgba(232, 239, 251, 0) 72%);
 }
 
 .hero-ring.r2 {
     width: min(430px, 78%);
     aspect-ratio: 1;
+    max-height: 92%;
     border: 2px dashed rgba(70, 119, 232, .2);
     animation: spinSlow 46s linear infinite;
 }
@@ -677,6 +696,7 @@ textarea:focus-visible,
 .hero-ring.r3 {
     width: min(310px, 58%);
     aspect-ratio: 1;
+    max-height: 68%;
     background: radial-gradient(circle, rgba(70, 119, 232, .13) 0%, rgba(70, 119, 232, 0) 70%);
 }
 
@@ -1077,6 +1097,20 @@ textarea:focus-visible,
 
 .otp-note.is-ok  { color: #157347; }
 .otp-note.is-err { color: var(--danger); }
+
+/* Test mode: no SMS gateway is connected yet, so the code is shown here.
+   Called out loudly so it never reads as "the send failed". */
+.otp-note.is-test {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid #f2cf7e;
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background-color: #fff8e6;
+    color: #6b4e00;
+    font-weight: 600;
+    font-size: .84rem;
+}
 
 /* Verified state: the number is locked in and clearly marked */
 .otp-row.is-verified .form-control {

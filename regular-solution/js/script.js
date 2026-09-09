@@ -394,7 +394,7 @@
 
             postJson('api/send-otp.php', { phone: digits })
                 .then(function (res) {
-                    setNote(res.message, res.test_mode ? '' : 'ok');
+                    setNote(res.message, res.test_mode ? 'test' : 'ok');
                     codeInput.value = '';
                     codeInput.focus();
                     startCooldown(res.resend_in || 30);

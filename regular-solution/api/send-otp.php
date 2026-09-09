@@ -67,11 +67,19 @@ $response = [
     'resend_in'=> $config['resend_cooldown'],
 ];
 
-// Test mode only: hand the code back so the flow can be completed without SMS.
+// Test mode: no SMS is sent. On a local machine the code is handed back so the
+// flow can be completed; on any public host it stays in api/storage/otp.log,
+// otherwise test mode left switched on would let anyone verify any number.
 if (rs_config()['sms_provider'] === 'log') {
     $response['test_mode'] = true;
-    $response['test_code'] = $code;
-    $response['message']   = 'Test mode — no SMS was sent. Your code is ' . $code . '.';
+
+    if (rs_is_local()) {
+        $response['test_code'] = $code;
+        $response['message']   = 'Test mode — no SMS was sent. Your code is ' . $code . '.';
+    } else {
+        $response['message'] = 'Test mode is still switched on, so no SMS was sent. '
+                             . 'Set a real sms_provider in api/config.php before taking the site live.';
+    }
 }
 
 rs_json($response);

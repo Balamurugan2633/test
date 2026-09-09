@@ -328,6 +328,71 @@ textarea:focus-visible,
     gap: 4px;
 }
 
+/* Centre the menu on the container, not on the space left over by the social +
+   CTA group. Bootstrap forces the collapse to display:flex at lg, where auto
+   margins could only centre the list within the remaining gap — pushing it
+   169px off centre. A symmetric 1fr/auto/1fr grid (the ::before supplies the
+   balancing left cell) puts the links on the true midpoint at every width. */
+@media (min-width: 992px) {
+    .main-nav .navbar-collapse {
+        display: grid !important;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        column-gap: 16px;
+    }
+
+    .main-nav .navbar-collapse::before {
+        content: "";
+    }
+
+    .main-nav .navbar-nav {
+        justify-content: center;
+    }
+
+    .main-nav .navbar-collapse > .d-flex {
+        justify-self: end;
+    }
+}
+
+/* Between 992px and 1199px the container is too narrow for a full-size social +
+   CTA group to fit in half the space beside the centred menu, so it wrapped to
+   a second line and made the bar 33px taller. Trimming both keeps it one row
+   without giving up the centring. */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .main-nav .navbar-collapse {
+        column-gap: 12px;
+    }
+
+    /* Higher specificity than the max-width:1199.98px block further down, which
+       would otherwise win on source order. A narrower menu lets both outer
+       columns grow, which is what keeps the links on the true centre. */
+    .main-nav .navbar-nav .nav-link {
+        padding: 22px 8px;
+        font-size: .9rem;
+    }
+
+    .main-nav .navbar-collapse > .d-flex {
+        gap: 8px !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .nav-social {
+        gap: 8px;
+    }
+
+    .nav-social a {
+        width: 32px;
+        height: 32px;
+        font-size: .92rem;
+    }
+
+    .main-nav .btn-accent {
+        padding: 9px 11px;
+        font-size: .82rem;
+        white-space: nowrap;
+    }
+}
+
 .main-nav .nav-link {
     color: rgba(255, 255, 255, .78);
     font-weight: 500;
@@ -470,23 +535,14 @@ textarea:focus-visible,
     100% { transform: scale(1.45); opacity: 0; }
 }
 
+/* Was a wide pill parked at top:230px, where it sat on top of the hero image,
+   section headings and (once the booking form moved into the hero) the form
+   fields themselves. Now it is a circular button aligned with the other two
+   floats, so the three read as one stack and cover nothing. */
 .float-download {
-    position: fixed;
     right: 22px;
-    top: 230px;
-    z-index: 1040;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    max-width: 172px;
-    padding: 12px 20px;
-    border-radius: var(--radius);
+    bottom: 94px;
     background: linear-gradient(135deg, #ff8f1f, #f4600b);
-    color: var(--white);
-    font-weight: 700;
-    line-height: 1.25;
-    box-shadow: var(--shadow-lg);
-    transition: transform .3s var(--ease), filter .3s var(--ease);
 }
 
 .float-download:hover,
@@ -532,12 +588,64 @@ textarea:focus-visible,
     gap: 14px;
 }
 
+/* Hero layout: copy top-left, booking form down the right spanning both rows,
+   rotating photo bottom-left. On phones the source order puts the form second,
+   directly under the headline, so it is the first thing a visitor can act on. */
+.hero-grid {
+    display: grid;
+    gap: 30px;
+}
+
+@media (min-width: 992px) {
+    .hero-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+            "copy  form"
+            "media form";
+        column-gap: 40px;
+        row-gap: 18px;
+        align-items: start;
+    }
+
+    .hero-copy-col  { grid-area: copy; }
+    .hero-form-col  { grid-area: form; }
+    .hero-media-col { grid-area: media; }
+}
+
 .hero-visual {
     position: relative;
     display: flex;
     align-items: flex-end;
     justify-content: center;
     min-height: 360px;
+}
+
+/* Slideshow: every frame occupies the same grid cell, so the block never
+   changes height as the photos cycle and nothing below it shifts. */
+.hero-slides {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    align-items: end;
+    width: 100%;
+    animation: floatY 6s ease-in-out infinite;
+}
+
+.hero-slide {
+    grid-area: 1 / 1;
+    max-height: 430px;
+    width: auto;
+    max-width: 100%;
+    opacity: 0;
+    transform: scale(.96);
+    transition: opacity .85s var(--ease), transform .85s var(--ease);
+    pointer-events: none;
+}
+
+.hero-slide.is-active {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .hero-rings {
@@ -695,22 +803,74 @@ textarea:focus-visible,
 }
 
 .service-thumb {
+    position: relative;
     width: 104px;
     height: 104px;
     margin: 0 auto 20px;
     border-radius: 50%;
-    background-color: var(--light-bg);
+    background: radial-gradient(circle at 50% 38%, #ffffff 0%, var(--light-bg) 72%);
     display: grid;
     place-items: center;
-    overflow: hidden;
-    transition: background-color .35s var(--ease);
+    transition: background .35s var(--ease), box-shadow .35s var(--ease);
+    animation: thumbGlow 3.4s var(--ease) infinite;
 }
 
+/* Halo that expands and fades, so each icon reads as "live" */
+.service-thumb::before {
+    content: "";
+    position: absolute;
+    inset: -7px;
+    border-radius: 50%;
+    border: 2px solid rgba(70, 119, 232, .4);
+    animation: thumbRing 3.4s var(--ease) infinite;
+    pointer-events: none;
+}
+
+/* Soft coloured bloom sitting under the icon */
+.service-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(70, 119, 232, .22) 0%, rgba(70, 119, 232, 0) 68%);
+    opacity: 0;
+    transition: opacity .35s var(--ease);
+    pointer-events: none;
+}
+
+@keyframes thumbGlow {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(70, 119, 232, .10), 0 8px 20px rgba(70, 119, 232, .15); }
+    50%      { box-shadow: 0 0 0 1px rgba(70, 119, 232, .22), 0 12px 30px rgba(70, 119, 232, .36); }
+}
+
+@keyframes thumbRing {
+    0%   { transform: scale(.9);  opacity: .6; }
+    65%  { transform: scale(1.22); opacity: 0; }
+    100% { transform: scale(1.22); opacity: 0; }
+}
+
+/* Stagger the pulse across each row of four so the grid ripples rather than
+   flashing in unison. */
+.row > [class*="col-"]:nth-child(4n + 2) .service-thumb,
+.row > [class*="col-"]:nth-child(4n + 2) .service-thumb::before { animation-delay: .42s; }
+.row > [class*="col-"]:nth-child(4n + 3) .service-thumb,
+.row > [class*="col-"]:nth-child(4n + 3) .service-thumb::before { animation-delay: .84s; }
+.row > [class*="col-"]:nth-child(4n + 4) .service-thumb,
+.row > [class*="col-"]:nth-child(4n + 4) .service-thumb::before { animation-delay: 1.26s; }
+
 .service-card:hover .service-thumb {
-    background-color: rgba(70, 119, 232, .12);
+    background: radial-gradient(circle at 50% 38%, #ffffff 0%, #e4ecfd 72%);
+    box-shadow: 0 0 0 1px rgba(70, 119, 232, .3), 0 16px 38px rgba(70, 119, 232, .45);
+    animation-play-state: paused;
+}
+
+.service-card:hover .service-thumb::after {
+    opacity: 1;
 }
 
 .service-thumb img {
+    position: relative;
+    z-index: 1;
     width: 76px;
     height: 76px;
     object-fit: contain;
@@ -826,6 +986,120 @@ textarea:focus-visible,
     padding: 36px;
 }
 
+/* Compact heading for the form now that it sits inside the hero */
+.hero-form-col .booking-panel {
+    padding: 26px 24px;
+    border: 1px solid var(--border);
+}
+
+.booking-head {
+    margin-bottom: 18px;
+}
+
+.booking-head .section-tag {
+    margin-bottom: 10px;
+}
+
+.booking-head h2 {
+    font-size: clamp(1.32rem, 2.2vw, 1.72rem);
+    margin-bottom: 6px;
+}
+
+.booking-head p {
+    font-size: .92rem;
+    margin-bottom: 0;
+}
+
+/* Honeypot — off-screen rather than display:none, which some bots skip */
+.hp-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* OTP verification ------------------------------------------------------- */
+.otp-row {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.otp-row .form-control {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.btn-otp {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 10px 15px;
+    font-size: .84rem;
+    font-weight: 600;
+    border: 2px solid var(--secondary);
+    border-radius: var(--radius-sm);
+    background-color: var(--secondary);
+    color: var(--white);
+}
+
+.btn-otp:hover:not(:disabled),
+.btn-otp:focus:not(:disabled) {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+.btn-otp:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.otp-box {
+    margin-top: 12px;
+    padding: 14px;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-sm);
+    background-color: var(--light-bg);
+}
+
+.otp-code {
+    letter-spacing: .35em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.otp-note {
+    font-size: .8rem;
+    margin: 8px 0 0;
+    min-height: 1.2em;
+}
+
+.otp-note.is-ok  { color: #157347; }
+.otp-note.is-err { color: var(--danger); }
+
+/* Verified state: the number is locked in and clearly marked */
+.otp-row.is-verified .form-control {
+    border-color: #157347;
+    background-color: #f2fbf5;
+    color: #14532d;
+    font-weight: 600;
+}
+
+.otp-verified-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    font-size: .82rem;
+    font-weight: 600;
+    color: #157347;
+    background-color: #e7f7ed;
+    border: 2px solid #b6e6c8;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+}
+
 .form-label {
     font-weight: 600;
     font-size: .88rem;
@@ -877,6 +1151,42 @@ textarea:focus-visible,
 .booking-visual img {
     max-height: 420px;
     width: auto;
+}
+
+/* Contact page: the photo panel is stretched to the form's height by the row's
+   align-items:stretch, and cycles through the same professional shots. */
+.contact-media {
+    position: relative;
+    height: 100%;
+    min-height: 460px;
+    display: grid;
+    place-items: end center;
+    padding: 22px 22px 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: linear-gradient(160deg, #e9effe 0%, #f5f8fd 100%);
+}
+
+.contact-media::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(70, 119, 232, .12);
+    top: -80px;
+    right: -70px;
+}
+
+.contact-media .hero-slide {
+    position: relative;
+    z-index: 1;
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: contain;
+    object-position: bottom center;
 }
 
 /* 12. Why choose us ======================================================= */
@@ -1445,6 +1755,112 @@ textarea:focus-visible,
     font-size: .88rem;
 }
 
+/* 19b. Thank you page ===================================================== */
+.thankyou-wrap {
+    background: linear-gradient(180deg, #e9effe 0%, #f7f9fe 100%);
+    padding: 70px 0 84px;
+}
+
+.thankyou-card {
+    max-width: 720px;
+    margin: 0 auto;
+    background-color: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 44px 40px;
+    text-align: center;
+}
+
+.thankyou-mark {
+    width: 84px;
+    height: 84px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 2.6rem;
+    color: var(--white);
+    background: linear-gradient(140deg, #1eb46a, #12925a);
+    box-shadow: 0 14px 32px rgba(18, 146, 90, .34);
+    animation: markPop .55s var(--ease) both;
+}
+
+@keyframes markPop {
+    0%   { transform: scale(.6); opacity: 0; }
+    60%  { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.thankyou-card h1 {
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    margin-bottom: 12px;
+}
+
+.thankyou-lead {
+    font-size: 1.02rem;
+    max-width: 540px;
+    margin: 0 auto 30px;
+}
+
+.thankyou-steps {
+    text-align: left;
+    display: grid;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.thankyou-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background-color: var(--light-bg);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+}
+
+.thankyou-steps .step-dot {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: .92rem;
+    color: var(--white);
+    background: linear-gradient(140deg, var(--primary), #3560cf);
+}
+
+.thankyou-steps h2 {
+    font-size: 1rem;
+    margin-bottom: 2px;
+}
+
+.thankyou-steps p {
+    font-size: .9rem;
+    margin-bottom: 0;
+}
+
+.thankyou-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.thankyou-note {
+    font-size: .9rem;
+    margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+    .thankyou-wrap { padding: 44px 0 54px; }
+    .thankyou-card { padding: 30px 20px; }
+    .thankyou-actions .btn { width: 100%; }
+}
+
 /* 20. Scroll reveal animations ============================================ */
 .reveal {
     opacity: 0;
@@ -1470,8 +1886,18 @@ textarea:focus-visible,
 
     .hero-img,
     .hero-ring.r2,
-    .float-btn::before {
+    .float-btn::before,
+    .service-thumb,
+    .service-thumb::before {
         animation: none;
+    }
+
+    .service-thumb::before {
+        opacity: .35;
+    }
+
+    .hero-slide {
+        transition: none;
     }
 }
 
@@ -1509,13 +1935,6 @@ textarea:focus-visible,
 
     .main-nav .nav-link {
         padding: 22px 12px;
-    }
-
-    /* Below 1200px the header is shorter, so dock the button to the corner */
-    .float-download {
-        top: auto;
-        bottom: 96px;
-        right: 18px;
     }
 }
 
@@ -1600,8 +2019,21 @@ textarea:focus-visible,
     }
 
     .hero {
-        padding: 48px 0 40px;
+        padding: 40px 0 40px;
         text-align: center;
+    }
+
+    /* Tighten the copy block so the booking form reaches the fold sooner */
+    .hero-grid {
+        gap: 22px;
+    }
+
+    .hero h1 {
+        margin-bottom: 14px;
+    }
+
+    .hero .hero-copy {
+        margin-bottom: 22px;
     }
 
     .hero .hero-copy {
@@ -1632,13 +2064,6 @@ textarea:focus-visible,
 
     .about-visual {
         margin-bottom: 34px;
-    }
-
-    /* Keep the floating download button clear of the sticky navbar */
-    .float-download {
-        top: auto;
-        bottom: 96px;
-        right: 18px;
     }
 
     .testimonial-slider {
@@ -1698,12 +2123,8 @@ textarea:focus-visible,
     }
 
     .float-download {
-        top: auto;
-        bottom: 96px;
         right: 16px;
-        padding: 10px 16px;
-        font-size: .88rem;
-        max-width: 150px;
+        bottom: 84px;
     }
 
     .float-btn {
@@ -1782,19 +2203,36 @@ textarea:focus-visible,
         text-align: center;
     }
 
-    /* One item per line. Wrapping by content width left a lone third item
-       under a half-empty row; a single column keeps every icon and every
-       label on one axis, which reads as deliberate rather than ragged. */
+    /* Three even columns, icon above its label. Keeps the strip on one line of
+       the header instead of listing the items one under another, and the equal
+       columns stay aligned however the labels wrap. */
     .info-list {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 9px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px 6px;
+        align-items: start;
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 6px;
     }
 
     .info-icon {
         width: 34px;
         height: 34px;
         font-size: .95rem;
+    }
+
+    .info-text {
+        text-align: center;
+    }
+
+    .info-text .value {
+        font-size: .76rem;
+        line-height: 1.35;
     }
 
     .topbar {
@@ -1820,14 +2258,6 @@ textarea:focus-visible,
         flex: 1 1 100%;
     }
 
-    .float-download span {
-        display: none;
-    }
-
-    .float-download {
-        max-width: none;
-        padding: 12px 14px;
-    }
 }
 
 /* Small phones (iPhone SE / Galaxy A-series and narrower) --------------- */

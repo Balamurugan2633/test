@@ -110,6 +110,56 @@
         counters.forEach(function (el) { observer.observe(el); });
     }
 
+    /* 5b. Image slideshows (hero + contact) =============================== */
+    function initSlideshows() {
+        var reduceMotion = window.matchMedia &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        document.querySelectorAll('[data-hero-slides]').forEach(function (wrap) {
+            var slides = Array.prototype.slice.call(wrap.querySelectorAll('.hero-slide'));
+            if (slides.length < 2 || reduceMotion) return;
+
+            var interval = Number(wrap.dataset.slideInterval) || 4200;
+            var index = 0;
+            var timer = null;
+
+            // Pull the next photo in before it is shown so the crossfade does
+            // not start against a blank frame on a slow connection.
+            function preload(i) {
+                var next = slides[i];
+                if (next && next.loading === 'lazy') next.loading = 'eager';
+            }
+
+            function show(i) {
+                slides[index].classList.remove('is-active');
+                index = i;
+                slides[index].classList.add('is-active');
+                preload((index + 1) % slides.length);
+            }
+
+            function start() {
+                stop();
+                timer = window.setInterval(function () {
+                    show((index + 1) % slides.length);
+                }, interval);
+            }
+
+            function stop() {
+                if (timer) window.clearInterval(timer);
+                timer = null;
+            }
+
+            preload(1);
+            start();
+
+            // Pause while the tab is hidden so the cycle does not race ahead
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) stop();
+                else start();
+            });
+        });
+    }
+
     /* 6. Testimonial slider =============================================== */
     function initTestimonialSlider() {
         var slider = document.querySelector('[data-slider]');
@@ -230,7 +280,7 @@
         startAutoplay();
     }
 
-    /* 7. Booking / contact form validation ================================ */
+    /* 7. Booking / contact forms + OTP verification ======================== */
     function showFormMessage(form, message, isSuccess) {
         var box = form.querySelector('[data-form-message]');
         if (!box) return;
@@ -240,39 +290,219 @@
         box.setAttribute('role', 'alert');
     }
 
+    function postJson(url, data) {
+        var body = new URLSearchParams();
+        Object.keys(data).forEach(function (k) { body.append(k, data[k]); });
+
+        return fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json',
+                'X-Requested-With': 'fetch'
+            },
+            body: body.toString()
+        }).then(function (res) {
+            return res.json()
+                .catch(function () {
+                    // A PHP fatal or a 404 returns HTML, not JSON
+                    throw new Error('The server did not return a valid response. Is PHP running?');
+                })
+                .then(function (json) {
+                    if (!res.ok || !json.ok) {
+                        throw new Error(json.message || 'Something went wrong. Please try again.');
+                    }
+                    return json;
+                });
+        });
+    }
+
+    /* Wires the Send OTP / Verify pair inside one form. */
+    function initOtp(form) {
+        var phoneInput = form.querySelector('[data-otp-phone]');
+        var sendBtn    = form.querySelector('[data-otp-send]');
+        var box        = form.querySelector('[data-otp-box]');
+        var codeInput  = form.querySelector('[data-otp-input]');
+        var verifyBtn  = form.querySelector('[data-otp-verify]');
+        var note       = form.querySelector('[data-otp-note]');
+        if (!phoneInput || !sendBtn || !box || !codeInput || !verifyBtn) return null;
+
+        var state = { verified: false, verifiedNumber: '' };
+        var cooldownTimer = null;
+
+        function digitsOf(value) {
+            return (value || '').replace(/\D/g, '');
+        }
+
+        function setNote(message, kind) {
+            if (!note) return;
+            note.textContent = message;
+            note.className = 'otp-note' + (kind ? ' is-' + kind : '');
+        }
+
+        function startCooldown(seconds) {
+            var left = seconds;
+            sendBtn.disabled = true;
+            if (cooldownTimer) window.clearInterval(cooldownTimer);
+
+            cooldownTimer = window.setInterval(function () {
+                left -= 1;
+                if (left <= 0) {
+                    window.clearInterval(cooldownTimer);
+                    cooldownTimer = null;
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Resend OTP';
+                } else {
+                    sendBtn.textContent = 'Resend in ' + left + 's';
+                }
+            }, 1000);
+            sendBtn.textContent = 'Resend in ' + left + 's';
+        }
+
+        // Typing a different number invalidates the previous verification.
+        phoneInput.addEventListener('input', function () {
+            var digits = digitsOf(phoneInput.value);
+            phoneInput.setCustomValidity(/^[6-9]\d{9}$/.test(digits) ? '' : 'invalid');
+
+            if (state.verified && digits !== state.verifiedNumber) {
+                state.verified = false;
+                phoneInput.readOnly = false;
+                phoneInput.parentNode.classList.remove('is-verified');
+                var tag = form.querySelector('.otp-verified-tag');
+                if (tag) tag.replaceWith(sendBtn);
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send OTP';
+                box.classList.add('d-none');
+                setNote('', '');
+            }
+        });
+
+        sendBtn.addEventListener('click', function () {
+            var digits = digitsOf(phoneInput.value);
+            if (!/^[6-9]\d{9}$/.test(digits)) {
+                phoneInput.focus();
+                setNote('Enter a valid 10-digit mobile number first.', 'err');
+                box.classList.remove('d-none');
+                return;
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending…';
+            box.classList.remove('d-none');
+            setNote('Sending your code…', '');
+
+            postJson('api/send-otp.php', { phone: digits })
+                .then(function (res) {
+                    setNote(res.message, res.test_mode ? '' : 'ok');
+                    codeInput.value = '';
+                    codeInput.focus();
+                    startCooldown(res.resend_in || 30);
+                })
+                .catch(function (err) {
+                    setNote(err.message, 'err');
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Send OTP';
+                });
+        });
+
+        verifyBtn.addEventListener('click', function () {
+            var digits = digitsOf(phoneInput.value);
+            var code   = digitsOf(codeInput.value);
+
+            if (code.length < 4) {
+                setNote('Enter the code we sent you.', 'err');
+                codeInput.focus();
+                return;
+            }
+
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Checking…';
+
+            postJson('api/verify-otp.php', { phone: digits, code: code })
+                .then(function () {
+                    state.verified = true;
+                    state.verifiedNumber = digits;
+
+                    if (cooldownTimer) window.clearInterval(cooldownTimer);
+                    phoneInput.readOnly = true;
+                    phoneInput.parentNode.classList.add('is-verified');
+
+                    // Swap the send button for a verified badge
+                    var tag = document.createElement('span');
+                    tag.className = 'otp-verified-tag';
+                    tag.innerHTML = '<i class="bi bi-patch-check-fill" aria-hidden="true"></i> Verified';
+                    sendBtn.replaceWith(tag);
+
+                    box.classList.add('d-none');
+                    showFormMessage(form, 'Mobile number verified. You can send your request now.', true);
+                })
+                .catch(function (err) {
+                    setNote(err.message, 'err');
+                    codeInput.select();
+                })
+                .then(function () {
+                    verifyBtn.disabled = false;
+                    verifyBtn.textContent = 'Verify';
+                });
+        });
+
+        // Enter inside the code box should verify, not submit the whole form
+        codeInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                verifyBtn.click();
+            }
+        });
+
+        return state;
+    }
+
     function initForms() {
         document.querySelectorAll('form.needs-validation').forEach(function (form) {
-            // Indian mobile / landline friendly check on any tel input
-            var phone = form.querySelector('input[type="tel"]');
-            if (phone) {
-                phone.addEventListener('input', function () {
-                    var digits = phone.value.replace(/\D/g, '');
-                    phone.setCustomValidity(
-                        digits.length >= 10 && digits.length <= 13 ? '' : 'invalid'
-                    );
-                });
+            var otp = form.hasAttribute('data-otp-form') ? initOtp(form) : null;
+
+            // Plain tel check for any form without the OTP flow
+            if (!otp) {
+                var phone = form.querySelector('input[type="tel"]');
+                if (phone) {
+                    phone.addEventListener('input', function () {
+                        var digits = phone.value.replace(/\D/g, '');
+                        phone.setCustomValidity(
+                            digits.length >= 10 && digits.length <= 13 ? '' : 'invalid'
+                        );
+                    });
+                }
             }
 
             form.addEventListener('submit', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-
                 form.classList.add('was-validated');
 
                 if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
                     var firstInvalid = form.querySelector(':invalid');
                     if (firstInvalid) firstInvalid.focus();
                     showFormMessage(form, 'Please complete the highlighted fields before sending.', false);
                     return;
                 }
 
-                showFormMessage(
-                    form,
-                    'Thank you! Your request has been recorded. Our team will call you shortly on 1800 419 9090.',
-                    true
-                );
-                form.reset();
-                form.classList.remove('was-validated');
+                if (otp && !otp.verified) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    showFormMessage(form, 'Please verify your mobile number with the OTP before sending.', false);
+                    var sendBtn = form.querySelector('[data-otp-send]');
+                    if (sendBtn) sendBtn.focus();
+                    return;
+                }
+
+                // Valid and verified: let it post to the server, which records
+                // the request and redirects to the Thank You page.
+                var submit = form.querySelector('button[type="submit"]');
+                if (submit) {
+                    submit.disabled = true;
+                    submit.textContent = 'Sending…';
+                }
             });
         });
     }
@@ -307,6 +537,7 @@
         initMobileMenuClose();
         initReveal();
         initCounters();
+        initSlideshows();
         initTestimonialSlider();
         initForms();
         initNewsletter();

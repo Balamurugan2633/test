@@ -15,7 +15,9 @@
     <meta property="og:description" content="One platform for all your home service needs in Chennai. Verified professionals, transparent pricing, 24x7 support.">
     <meta property="og:image" content="images/hero.png">
 
-    <link rel="icon" href="images/logo.png" type="image/png">
+    <link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="images/rs-icon.png" sizes="512x512" type="image/png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,7 +59,7 @@
                             <span class="info-icon" aria-hidden="true"><i class="bi bi-geo-alt-fill"></i></span>
                             <span class="info-text">
                                 <span class="label">Our Location</span>
-                                <span class="value">Thiruvanmiyur, Ch-41</span>
+                                <span class="value">Thiruvanmiyur, Ch&#8209;41</span>
                             </span>
                         </li>
                         <li class="info-item">
@@ -115,18 +117,19 @@
 <a class="float-btn float-phone" href="tel:18004199090" aria-label="Call Regular Solution">
     <i class="bi bi-telephone-fill" aria-hidden="true"></i>
 </a>
-<a class="float-download" href="#download">
-    <span>Download Now</span>
-    <i class="bi bi-link-45deg" aria-hidden="true"></i>
+<a class="float-btn float-download" href="#download" aria-label="Download the Regular Solution app">
+    <i class="bi bi-phone-fill" aria-hidden="true"></i>
 </a>
 
 <main id="main">
 
-    <!-- ==================== HERO ==================== -->
+    <!-- ==================== HERO (copy + booking form + slideshow) ==================== -->
     <section class="hero">
         <div class="container">
-            <div class="row align-items-center g-4">
-                <div class="col-lg-6">
+            <div class="hero-grid">
+
+                <!-- Copy -->
+                <div class="hero-copy-col">
                     <h1>
                         <span class="text-brand">Trusted Home Services in Chennai</span>
                         <span class="text-red">Regular</span>
@@ -146,7 +149,133 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
+                <!-- Booking form: first block on phones, right-hand column on desktop -->
+                <div class="hero-form-col" id="booking">
+                    <div class="booking-panel">
+                        <div class="booking-head">
+                            <span class="section-tag">Book Online</span>
+                            <h2>Ready To Get Service?</h2>
+                            <p>Share a few details and our coordinator will call you back with a free quote.</p>
+                        </div>
+
+                        <form class="needs-validation" action="api/submit-form.php" method="post"
+                              data-otp-form novalidate>
+                            <input type="hidden" name="form_name" value="Home page booking">
+                            <!-- Honeypot: hidden from people, filled in by bots -->
+                            <div class="hp-field" aria-hidden="true">
+                                <label for="bookCompany">Company</label>
+                                <input type="text" id="bookCompany" name="company" tabindex="-1" autocomplete="off">
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="bookName">Name</label>
+                                    <input class="form-control" type="text" id="bookName" name="name"
+                                           autocomplete="name" placeholder="Your full name" required>
+                                    <div class="invalid-feedback">Please enter your name.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label" for="bookEmail">Email</label>
+                                    <input class="form-control" type="email" id="bookEmail" name="email"
+                                           autocomplete="email" placeholder="you@example.com" required>
+                                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                                </div>
+
+                                <!-- Full width: the number and the Send OTP button need the room -->
+                                <div class="col-12">
+                                    <label class="form-label" for="bookPhone">Mobile Number</label>
+                                    <div class="otp-row">
+                                        <input class="form-control" type="tel" id="bookPhone" name="phone"
+                                               inputmode="numeric" autocomplete="tel" maxlength="15"
+                                               placeholder="10-digit mobile number" required data-otp-phone>
+                                        <button class="btn btn-otp" type="button" data-otp-send>Send OTP</button>
+                                    </div>
+                                    <div class="invalid-feedback">Enter a valid 10-digit mobile number.</div>
+
+                                    <div class="otp-box d-none" data-otp-box>
+                                        <label class="form-label" for="bookOtp">Enter the 6-digit OTP</label>
+                                        <div class="otp-row">
+                                            <input class="form-control otp-code" type="text" id="bookOtp"
+                                                   inputmode="numeric" maxlength="6" placeholder="------"
+                                                   autocomplete="one-time-code" data-otp-input>
+                                            <button class="btn btn-otp" type="button" data-otp-verify>Verify</button>
+                                        </div>
+                                        <p class="otp-note" data-otp-note aria-live="polite"></p>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label" for="bookService">Select Service</label>
+                                    <select class="form-select" id="bookService" name="service" required>
+                                        <option value="" selected disabled>Choose a service</option>
+                                        <option>Air Conditioner AC Services</option>
+                                        <option>Home Cleaning Services</option>
+                                        <option>Electrician Services</option>
+                                        <option>Plumbing Services</option>
+                                        <option>Painting Services</option>
+                                        <option>Carpentry Services</option>
+                                        <option>Catering Services</option>
+                                        <option>Beautician Services</option>
+                                        <option>Pet Grooming Services</option>
+                                        <option>Rental House Services</option>
+                                        <option>Home Help Services</option>
+                                        <option>Construction Services</option>
+                                        <option>Travels Services</option>
+                                        <option>Transport Services</option>
+                                        <option>Packers and Movers Services</option>
+                                        <option>Interior Design Services</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a service.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label" for="bookDate">Date</label>
+                                    <input class="form-control" type="date" id="bookDate" name="date" required>
+                                    <div class="invalid-feedback">Please choose a service date.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label" for="bookTime">Time</label>
+                                    <input class="form-control" type="time" id="bookTime" name="time" required>
+                                    <div class="invalid-feedback">Please choose a preferred time.</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label" for="bookFrom">From</label>
+                                    <input class="form-control" type="text" id="bookFrom" name="from"
+                                           placeholder="Pickup / current area">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label" for="bookTo">To</label>
+                                    <input class="form-control" type="text" id="bookTo" name="to"
+                                           placeholder="Drop / destination area">
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label" for="bookAddress">Address</label>
+                                    <textarea class="form-control" id="bookAddress" name="address" rows="2"
+                                              placeholder="House / flat number, street, area, landmark, pincode" required></textarea>
+                                    <div class="invalid-feedback">Please enter your service address.</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <button class="btn btn-brand btn-lg w-100" type="submit">Send Request</button>
+                                    <p class="form-note mt-2 mb-0">
+                                        <i class="bi bi-shield-lock me-1" aria-hidden="true"></i>
+                                        Your details stay private and are used only to contact you.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="alert d-none" data-form-message></div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Rotating professional photos -->
+                <div class="hero-media-col">
                     <div class="hero-visual">
                         <div class="hero-rings" aria-hidden="true">
                             <span class="hero-ring r1"></span>
@@ -163,10 +292,17 @@
                             <span>Same Day<br>Service</span>
                         </div>
 
-                        <img class="hero-img" src="images/hero.png" width="900" height="900"
-                             alt="Regular Solution painter in uniform holding a paint roller and brush">
+                        <div class="hero-slides" data-hero-slides>
+                            <img class="hero-slide is-active" src="images/hero/electrician.webp" width="500" height="780" alt="Regular Solution electrician with a multimeter and cabling">
+                            <img class="hero-slide" src="images/hero/painting.webp" width="556" height="780" alt="Regular Solution painter with roller and brush" loading="lazy">
+                            <img class="hero-slide" src="images/hero/plumbing.webp" width="460" height="780" alt="Regular Solution plumber with pipe tools" loading="lazy">
+                            <img class="hero-slide" src="images/hero/home-cleaning.webp" width="527" height="780" alt="Regular Solution home cleaning professional" loading="lazy">
+                            <img class="hero-slide" src="images/hero/air-conditioner-ac.webp" width="493" height="780" alt="Regular Solution air conditioner technician" loading="lazy">
+                            <img class="hero-slide" src="images/hero/carpentry.webp" width="517" height="780" alt="Regular Solution carpenter with woodworking tools" loading="lazy">
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -331,119 +467,6 @@
                         <i class="bi bi-award stat-icon" aria-hidden="true"></i>
                         <div class="stat-value" data-target="10" data-suffix="+">0</div>
                         <p class="stat-label">Years Experience</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==================== BOOKING FORM ==================== -->
-    <section class="section-pad" id="booking">
-        <div class="container">
-            <div class="section-head reveal">
-                <span class="section-tag">Book Online</span>
-                <h2>Ready To Get Service?</h2>
-                <p>Share a few details and our coordinator will call you back with a free quote.</p>
-            </div>
-
-            <div class="row align-items-center g-5">
-                <div class="col-lg-4 d-none d-lg-block reveal">
-                    <div class="booking-visual">
-                        <img src="images/booking.png" alt="Regular Solution electrician ready for a service call" width="560" height="560" loading="lazy">
-                    </div>
-                </div>
-
-                <div class="col-lg-8 reveal" data-reveal-delay="120">
-                    <div class="booking-panel">
-                        <form class="needs-validation" novalidate>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label" for="bookName">Name</label>
-                                    <input class="form-control" type="text" id="bookName" name="name"
-                                           placeholder="Your full name" required>
-                                    <div class="invalid-feedback">Please enter your name.</div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label" for="bookPhone">Phone Number</label>
-                                    <input class="form-control" type="tel" id="bookPhone" name="phone"
-                                           placeholder="10-digit mobile number" required>
-                                    <div class="invalid-feedback">Enter a valid phone number (at least 10 digits).</div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label" for="bookEmail">Email</label>
-                                    <input class="form-control" type="email" id="bookEmail" name="email"
-                                           placeholder="you@example.com" required>
-                                    <div class="invalid-feedback">Please enter a valid email address.</div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label" for="bookService">Select Service</label>
-                                    <select class="form-select" id="bookService" name="service" required>
-                                        <option value="" selected disabled>Choose a service</option>
-                                        <option>Air Conditioner AC Services</option>
-                                        <option>Home Cleaning Services</option>
-                                        <option>Electrician Services</option>
-                                        <option>Plumbing Services</option>
-                                        <option>Painting Services</option>
-                                        <option>Carpentry Services</option>
-                                        <option>Catering Services</option>
-                                        <option>Beautician Services</option>
-                                        <option>Pet Grooming Services</option>
-                                        <option>Rental House Services</option>
-                                        <option>Home Help Services</option>
-                                        <option>Construction Services</option>
-                                        <option>Travels Services</option>
-                                        <option>Transport Services</option>
-                                        <option>Packers and Movers Services</option>
-                                        <option>Interior Design Services</option>
-                                    </select>
-                                    <div class="invalid-feedback">Please select a service.</div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label" for="bookDate">Date</label>
-                                    <input class="form-control" type="date" id="bookDate" name="date" required>
-                                    <div class="invalid-feedback">Please choose a service date.</div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label" for="bookTime">Time</label>
-                                    <input class="form-control" type="time" id="bookTime" name="time" required>
-                                    <div class="invalid-feedback">Please choose a preferred time.</div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label" for="bookFrom">From</label>
-                                    <input class="form-control" type="text" id="bookFrom" name="from"
-                                           placeholder="Pickup / current area">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label" for="bookTo">To</label>
-                                    <input class="form-control" type="text" id="bookTo" name="to"
-                                           placeholder="Drop / destination area">
-                                </div>
-
-                                <div class="col-12">
-                                    <label class="form-label" for="bookAddress">Address</label>
-                                    <textarea class="form-control" id="bookAddress" name="address" rows="3"
-                                              placeholder="House / flat number, street, area, landmark, pincode" required></textarea>
-                                    <div class="invalid-feedback">Please enter your service address.</div>
-                                </div>
-
-                                <div class="col-12 d-flex flex-wrap align-items-center gap-3">
-                                    <button class="btn btn-brand btn-lg" type="submit">Send Request</button>
-                                    <span class="form-note">
-                                        <i class="bi bi-shield-lock me-1" aria-hidden="true"></i>
-                                        Your details stay private and are used only to contact you.
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="alert d-none" data-form-message></div>
-                        </form>
                     </div>
                 </div>
             </div>

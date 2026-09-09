@@ -15,7 +15,9 @@
     <meta property="og:description" content="Contact Regular Solution in Thiruvanmiyur, Chennai. Call 18004199090 any time, or book a home service online with our quick request form.">
     <meta property="og:image" content="images/hero.png">
 
-    <link rel="icon" href="images/logo.png" type="image/png">
+    <link rel="icon" href="images/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="images/rs-icon.png" sizes="512x512" type="image/png">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,7 +59,7 @@
                             <span class="info-icon" aria-hidden="true"><i class="bi bi-geo-alt-fill"></i></span>
                             <span class="info-text">
                                 <span class="label">Our Location</span>
-                                <span class="value">Thiruvanmiyur, Ch-41</span>
+                                <span class="value">Thiruvanmiyur, Ch&#8209;41</span>
                             </span>
                         </li>
                         <li class="info-item">
@@ -115,9 +117,8 @@
 <a class="float-btn float-phone" href="tel:18004199090" aria-label="Call Regular Solution">
     <i class="bi bi-telephone-fill" aria-hidden="true"></i>
 </a>
-<a class="float-download" href="#download">
-    <span>Download Now</span>
-    <i class="bi bi-link-45deg" aria-hidden="true"></i>
+<a class="float-btn float-download" href="#download" aria-label="Download the Regular Solution app">
+    <i class="bi bi-phone-fill" aria-hidden="true"></i>
 </a>
 
 <main id="main">
@@ -185,39 +186,67 @@
                 <p>Share a few details and our coordinator will call you back with a free quote.</p>
             </div>
 
-            <div class="row align-items-center g-5">
-                <div class="col-lg-4 d-none d-lg-block reveal">
-                    <div class="booking-visual">
-                        <img src="images/booking.png" alt="Regular Solution electrician ready for a service call" width="560" height="560" loading="lazy">
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-5 d-none d-lg-block reveal">
+                    <!-- Matches the form's height and cycles through our professionals -->
+                    <div class="contact-media" data-hero-slides data-slide-interval="4000">
+                        <img class="hero-slide is-active" src="images/hero/electrician.webp" width="500" height="780" alt="Regular Solution electrician ready for a service call">
+                        <img class="hero-slide" src="images/hero/plumbing.webp" width="460" height="780" alt="Regular Solution plumber with pipe tools" loading="lazy">
+                        <img class="hero-slide" src="images/hero/home-cleaning.webp" width="527" height="780" alt="Regular Solution home cleaning professional" loading="lazy">
+                        <img class="hero-slide" src="images/hero/painting.webp" width="556" height="780" alt="Regular Solution painter with roller and brush" loading="lazy">
+                        <img class="hero-slide" src="images/hero/air-conditioner-ac.webp" width="493" height="780" alt="Regular Solution air conditioner technician" loading="lazy">
                     </div>
                 </div>
 
-                <div class="col-lg-8 reveal" data-reveal-delay="120">
-                    <div class="booking-panel">
-                        <form class="needs-validation" novalidate>
+                <div class="col-lg-7 reveal" data-reveal-delay="120">
+                    <div class="booking-panel h-100">
+                        <form class="needs-validation" action="api/submit-form.php" method="post"
+                              data-otp-form novalidate>
+                            <input type="hidden" name="form_name" value="Contact page request">
+                            <!-- Honeypot: hidden from people, filled in by bots -->
+                            <div class="hp-field" aria-hidden="true">
+                                <label for="contactCompany">Company</label>
+                                <input type="text" id="contactCompany" name="company" tabindex="-1" autocomplete="off">
+                            </div>
+
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label" for="bookName">Name</label>
                                     <input class="form-control" type="text" id="bookName" name="name"
-                                           placeholder="Your full name" required>
+                                           autocomplete="name" placeholder="Your full name" required>
                                     <div class="invalid-feedback">Please enter your name.</div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label" for="bookPhone">Phone Number</label>
-                                    <input class="form-control" type="tel" id="bookPhone" name="phone"
-                                           placeholder="10-digit mobile number" required>
-                                    <div class="invalid-feedback">Enter a valid phone number (at least 10 digits).</div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label class="form-label" for="bookEmail">Email</label>
                                     <input class="form-control" type="email" id="bookEmail" name="email"
-                                           placeholder="you@example.com" required>
+                                           autocomplete="email" placeholder="you@example.com" required>
                                     <div class="invalid-feedback">Please enter a valid email address.</div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-12">
+                                    <label class="form-label" for="bookPhone">Mobile Number</label>
+                                    <div class="otp-row">
+                                        <input class="form-control" type="tel" id="bookPhone" name="phone"
+                                               inputmode="numeric" autocomplete="tel" maxlength="15"
+                                               placeholder="10-digit mobile number" required data-otp-phone>
+                                        <button class="btn btn-otp" type="button" data-otp-send>Send OTP</button>
+                                    </div>
+                                    <div class="invalid-feedback">Enter a valid 10-digit mobile number.</div>
+
+                                    <div class="otp-box d-none" data-otp-box>
+                                        <label class="form-label" for="bookOtp">Enter the 6-digit OTP</label>
+                                        <div class="otp-row">
+                                            <input class="form-control otp-code" type="text" id="bookOtp"
+                                                   inputmode="numeric" maxlength="6" placeholder="------"
+                                                   autocomplete="one-time-code" data-otp-input>
+                                            <button class="btn btn-otp" type="button" data-otp-verify>Verify</button>
+                                        </div>
+                                        <p class="otp-note" data-otp-note aria-live="polite"></p>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
                                     <label class="form-label" for="bookService">Select Service</label>
                                     <select class="form-select" id="bookService" name="service" required>
                                         <option value="" selected disabled>Choose a service</option>

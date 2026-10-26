@@ -47,8 +47,13 @@ regular-solution/
 ├── blog.html               # Blog grid (6 posts) with pagination
 ├── contact.html            # Contact details, booking form, map, FAQ
 │
+├── packers-movers-chennai.html  # Google Ads landing page (no nav, single CTA)
+├── privacy.html            # Privacy policy
+├── terms.html              # Terms & conditions
+│
 ├── css/
-│   └── style.css           # All custom styling (21 numbered sections)
+│   ├── style.css           # All custom styling (21 numbered sections)
+│   └── landing.css         # Landing-page-only layer (12 numbered sections)
 │
 ├── js/
 │   └── script.js           # Sticky nav, scroll reveal, counters, slider, form validation
@@ -90,6 +95,18 @@ regular-solution/
 
 Floating buttons (WhatsApp bottom-left, phone bottom-right, orange *Download Now*) appear on
 every page.
+
+**packers-movers-chennai.html** — the paid-traffic landing page
+
+A deliberately stripped-down page for Google Ads moving campaigns: announcement bar, logo plus a
+single *Get Free Quote* button (no navigation, so a paid click converts instead of browsing),
+hero with the quote form, trust strip, six moving-service cards, three-step process, Chennai
+service-area chips, FAQ, closing CTA and a short footer. It is `noindex, follow` so it does not
+compete with `services.html` for the same query.
+
+It reuses the shared tokens in `style.css`, the OTP markup hooks from the home-page booking form
+(so `js/script.js` wires it up with no extra code) and `api/submit-form.php`, and adds only
+`css/landing.css` on top. Below 992px the form moves above the hero copy.
 
 ---
 
@@ -177,6 +194,10 @@ Logo, service icons and worker photographs come from the project's own `Regular 
 folder. They were cropped and resized for the web (service icons to 320×320, worker photos to
 520–900px tall) so the whole site loads in roughly 1.5 MB. Testimonial avatars and blog covers are
 generated placeholders — swap in real photography before launch.
+
+`images/services/local-route.jpg` was added for the landing page's *Local Shifting* card. It is
+the pin-to-pin route icon from `Regular Solution/icons/Travels and Transport Services.jpg`,
+cropped to its ink bounding box and resized to 320×320 to match the other service icons.
 
 ---
 

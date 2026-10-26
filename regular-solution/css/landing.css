@@ -1,0 +1,681 @@
+/* ==========================================================================
+   Regular Solution — Google Ads landing page (packers-movers-chennai.html)
+   Standalone styles, loaded after style.css so the brand tokens defined there
+   are reused. Nothing here affects the main site pages.
+
+   1.  Landing tokens
+   2.  Announcement bar & header
+   3.  Hero + quote form
+   4.  Trust strip
+   5.  Section headings
+   6.  Service cards
+   7.  How it works
+   8.  Service area chips
+   9.  FAQ
+   10. Closing CTA band
+   11. Landing footer
+   12. Responsive refinements
+   ========================================================================== */
+
+/* 1. Landing tokens ======================================================= */
+body.lp {
+    --lp-orange: #F2760A;
+    --lp-orange-dark: #d96706;
+    --lp-blue: #1D4ED8;
+    --lp-navy: #16294d;
+    --lp-footer: #0e1b33;
+    --lp-soft: #F4F7FC;
+    --lp-line: #e4e9f3;
+
+    background: var(--white);
+}
+
+.lp-section {
+    padding: 72px 0;
+}
+
+.lp-section--soft {
+    background: var(--lp-soft);
+}
+
+/* 2. Announcement bar & header =========================================== */
+.lp-announce {
+    background: var(--lp-navy);
+    color: rgba(255, 255, 255, .88);
+    font-size: .9rem;
+    padding: 10px 0;
+}
+
+.lp-announce .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lp-announce a {
+    color: var(--white);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.lp-announce a:hover,
+.lp-announce a:focus-visible {
+    text-decoration: underline;
+}
+
+.lp-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--lp-line);
+    padding: 14px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.lp-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.lp-header img {
+    width: auto;
+    height: 46px;
+}
+
+/* 3. Hero + quote form =================================================== */
+.lp-hero {
+    background: linear-gradient(180deg, var(--lp-soft) 0%, var(--white) 100%);
+    padding: 56px 0 0;
+    overflow: hidden;
+}
+
+.lp-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr minmax(380px, 480px);
+    gap: 48px;
+    align-items: start;
+}
+
+.lp-eyebrow {
+    display: inline-block;
+    background: rgba(70, 119, 232, .12);
+    color: var(--lp-blue);
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 20px;
+}
+
+.lp-hero h1 {
+    font-size: clamp(2.1rem, 4vw, 3.3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--secondary);
+    margin-bottom: 18px;
+}
+
+.lp-hero h1 .hl {
+    color: var(--lp-blue);
+}
+
+.lp-hero-copy {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 34em;
+    margin-bottom: 28px;
+}
+
+.lp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.btn-lp-orange {
+    background: var(--lp-orange);
+    border: 2px solid var(--lp-orange);
+    color: var(--white);
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: var(--radius-sm);
+    transition: background .25s var(--ease), transform .25s var(--ease);
+}
+
+.btn-lp-orange:hover,
+.btn-lp-orange:focus-visible {
+    background: var(--lp-orange-dark);
+    border-color: var(--lp-orange-dark);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.btn-lp-ghost {
+    background: var(--white);
+    border: 2px solid var(--lp-line);
+    color: var(--secondary);
+    font-weight: 700;
+    padding: 14px 24px;
+    border-radius: var(--radius-sm);
+    transition: border-color .25s var(--ease), color .25s var(--ease);
+}
+
+.btn-lp-ghost:hover,
+.btn-lp-ghost:focus-visible {
+    border-color: var(--lp-blue);
+    color: var(--lp-blue);
+}
+
+.lp-ticks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    padding: 0;
+    margin: 0 0 28px;
+    list-style: none;
+    color: var(--muted);
+    font-size: .95rem;
+}
+
+.lp-ticks i {
+    color: #16a34a;
+    margin-right: 6px;
+}
+
+.lp-hero-photo {
+    display: block;
+    width: 100%;
+    max-width: 330px;
+    height: auto;
+    margin-top: 8px;
+}
+
+/* Quote card */
+.lp-quote {
+    background: var(--white);
+    border: 1px solid var(--lp-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 28px;
+    margin-bottom: 40px;
+}
+
+.lp-quote h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 4px;
+}
+
+.lp-quote-sub {
+    color: var(--muted);
+    font-size: .94rem;
+    margin-bottom: 20px;
+}
+
+.lp-quote .form-label {
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--secondary);
+    margin-bottom: 6px;
+}
+
+.lp-quote .form-control,
+.lp-quote .form-select {
+    border: 1px solid var(--lp-line);
+    border-radius: var(--radius-sm);
+    padding: 11px 13px;
+    font-size: .95rem;
+}
+
+.lp-quote .form-control:focus,
+.lp-quote .form-select:focus {
+    border-color: var(--lp-blue);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, .14);
+}
+
+.lp-consent {
+    font-size: .78rem;
+    color: var(--muted);
+    margin: 10px 0 0;
+}
+
+/* The OTP row reuses the same markup hooks as the main site's booking form,
+   so js/script.js wires it up with no extra code. */
+.lp-quote .otp-row {
+    display: flex;
+    gap: 8px;
+}
+
+.lp-quote .otp-row .form-control {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.lp-quote .btn-otp {
+    flex: 0 0 auto;
+    background: var(--secondary);
+    color: var(--white);
+    font-size: .85rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    padding: 0 16px;
+    white-space: nowrap;
+}
+
+.lp-quote .btn-otp:hover:not(:disabled),
+.lp-quote .btn-otp:focus-visible:not(:disabled) {
+    background: var(--lp-blue);
+    color: var(--white);
+}
+
+.lp-quote .btn-otp:disabled {
+    opacity: .55;
+}
+
+.lp-quote .otp-box {
+    margin-top: 12px;
+    padding: 14px;
+    background: var(--lp-soft);
+    border-radius: var(--radius-sm);
+}
+
+.lp-quote .otp-code {
+    letter-spacing: .4em;
+    font-weight: 600;
+}
+
+.lp-quote .otp-note {
+    font-size: .8rem;
+    margin: 8px 0 0;
+    color: var(--muted);
+}
+
+.lp-quote .otp-note.is-error {
+    color: var(--danger);
+}
+
+.lp-quote .otp-note.is-success {
+    color: #16a34a;
+}
+
+.lp-quote .otp-verified-tag {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #16a34a;
+}
+
+/* Honeypot: off-screen for people, still filled in by bots. */
+body.lp .hp-field {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* 4. Trust strip ========================================================= */
+.lp-trust {
+    border-top: 1px solid var(--lp-line);
+    border-bottom: 1px solid var(--lp-line);
+    background: var(--white);
+    padding: 26px 0;
+}
+
+.lp-trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.lp-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.lp-trust-item img {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 auto;
+    border-radius: var(--radius-sm);
+    background: var(--lp-soft);
+}
+
+.lp-trust-item h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin: 0;
+}
+
+.lp-trust-item p {
+    font-size: .86rem;
+    color: var(--muted);
+    margin: 2px 0 0;
+}
+
+/* 5. Section headings ==================================================== */
+.lp-head {
+    text-align: center;
+    max-width: 44rem;
+    margin: 0 auto 44px;
+}
+
+.lp-tag {
+    display: block;
+    color: var(--lp-blue);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.lp-head h2 {
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    font-weight: 800;
+    color: var(--secondary);
+    margin-bottom: 14px;
+}
+
+.lp-head p {
+    color: var(--muted);
+    margin: 0;
+}
+
+/* 6. Service cards ======================================================= */
+.lp-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.lp-card {
+    background: var(--white);
+    border: 1px solid var(--lp-line);
+    border-radius: var(--radius);
+    padding: 30px 26px;
+    text-align: center;
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+}
+
+.lp-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    border-color: rgba(29, 78, 216, .3);
+}
+
+.lp-card img {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+}
+
+.lp-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 10px;
+}
+
+.lp-card p {
+    font-size: .92rem;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* 7. How it works ======================================================== */
+.lp-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.lp-step {
+    background: var(--white);
+    border-left: 4px solid var(--lp-orange);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    padding: 26px 24px;
+    text-align: center;
+}
+
+.lp-step-no {
+    display: block;
+    color: var(--lp-blue);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.lp-step h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--secondary);
+    margin-bottom: 10px;
+}
+
+.lp-step p {
+    font-size: .92rem;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* 8. Service area chips ================================================== */
+.lp-areas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding: 0;
+    margin: 0 0 16px;
+    list-style: none;
+}
+
+.lp-areas li {
+    background: var(--white);
+    border: 1px solid var(--lp-line);
+    border-radius: var(--radius-pill);
+    padding: 9px 20px;
+    font-size: .92rem;
+    font-weight: 500;
+    color: var(--secondary);
+}
+
+.lp-areas-note {
+    text-align: center;
+    font-size: .82rem;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* 9. FAQ ================================================================= */
+.lp-faq {
+    max-width: 52rem;
+    margin: 0 auto;
+}
+
+.lp-faq details {
+    border-bottom: 1px solid var(--lp-line);
+    padding: 20px 0;
+}
+
+.lp-faq summary {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--secondary);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.lp-faq summary::-webkit-details-marker {
+    display: none;
+}
+
+.lp-faq summary::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 0;
+    height: 0;
+    border-left: 7px solid var(--secondary);
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    transition: transform .2s var(--ease);
+}
+
+.lp-faq details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.lp-faq details p {
+    color: var(--muted);
+    margin: 12px 0 0 19px;
+}
+
+/* 10. Closing CTA band =================================================== */
+.lp-cta {
+    background: var(--lp-navy);
+    color: var(--white);
+    padding: 60px 0;
+}
+
+.lp-cta-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+}
+
+.lp-cta h2 {
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.lp-cta p {
+    color: rgba(255, 255, 255, .8);
+    margin: 0;
+}
+
+.lp-cta .btn-lp-ghost {
+    background: var(--white);
+    border-color: var(--white);
+}
+
+/* 11. Landing footer ===================================================== */
+.lp-footer {
+    background: var(--lp-footer);
+    color: rgba(255, 255, 255, .72);
+    padding: 44px 0;
+    font-size: .92rem;
+}
+
+.lp-footer h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 12px;
+}
+
+.lp-footer p {
+    margin: 0 0 10px;
+}
+
+.lp-footer a {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+.lp-footer a:hover,
+.lp-footer a:focus-visible {
+    color: var(--accent);
+}
+
+/* 12. Responsive refinements ============================================= */
+@media (max-width: 1199.98px) {
+    .lp-hero-grid {
+        grid-template-columns: 1fr minmax(340px, 420px);
+        gap: 32px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    /* Form first: a paid click should land on the field, not scroll for it. */
+    .lp-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .lp-hero-form-col {
+        order: -1;
+    }
+
+    .lp-hero-photo {
+        margin: 0 auto;
+    }
+
+    .lp-cards,
+    .lp-steps,
+    .lp-trust-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lp-section {
+        padding: 56px 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .lp-cards,
+    .lp-steps,
+    .lp-trust-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lp-announce .container,
+    .lp-cta-grid {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .lp-quote {
+        padding: 22px 18px;
+    }
+
+    .lp-actions .btn-lp-orange,
+    .lp-actions .btn-lp-ghost {
+        width: 100%;
+        text-align: center;
+    }
+
+    .lp-header img {
+        height: 38px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lp-card,
+    .btn-lp-orange,
+    .btn-lp-ghost,
+    .lp-faq summary::before {
+        transition: none;
+    }
+}

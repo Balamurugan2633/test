@@ -1,0 +1,22 @@
+# Netlify deploy settings for the Regular Solution site.
+#
+# The site lives in regular-solution/, not at the repo root, so without the
+# publish setting below Netlify looks for an index.html next to this file,
+# finds none, and answers every request with its "Page not found" page.
+
+[build]
+  publish = "regular-solution"
+
+# Netlify serves static files only — it does not execute PHP. Left alone, these
+# endpoints are handed to visitors as readable source, which would publish the
+# SMS credentials in api/config.php the moment they are filled in. Block them
+# until the backend is either moved to PHP hosting or ported to Functions.
+[[redirects]]
+  from = "/api/*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/thank-you.php"
+  to = "/404.html"
+  status = 404

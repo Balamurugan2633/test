@@ -137,6 +137,13 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12">
+                                    <label class="form-label" for="lpEmail">Email address</label>
+                                    <input class="form-control" type="email" id="lpEmail" name="email"
+                                           autocomplete="email" placeholder="you@example.com">
+                                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                                </div>
+
                                 <div class="col-md-6">
                                     <label class="form-label" for="lpService">Moving service *</label>
                                     <select class="form-select" id="lpService" name="service" required>
@@ -157,6 +164,31 @@
                                 </div>
 
                                 <div class="col-md-6">
+                                    <label class="form-label" for="lpMoveType">Move type</label>
+                                    <select class="form-select" id="lpMoveType" name="move_type">
+                                        <option value="" selected>Select move type</option>
+                                        <option>Within Chennai</option>
+                                        <option>Intercity</option>
+                                        <option>Outer city</option>
+                                        <option>Part load</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label" for="lpHouseType">House type</label>
+                                    <select class="form-select" id="lpHouseType" name="house_type">
+                                        <option value="" selected>Select house type</option>
+                                        <option>1 RK</option>
+                                        <option>1 BHK</option>
+                                        <option>2 BHK</option>
+                                        <option>3 BHK</option>
+                                        <option>4 BHK+</option>
+                                        <option>Villa / Independent house</option>
+                                        <option>Office / Commercial</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
                                     <label class="form-label" for="lpFrom">Moving from</label>
                                     <input class="form-control" type="text" id="lpFrom" name="from"
                                            placeholder="Area / city">
@@ -168,10 +200,40 @@
                                            placeholder="Area / city">
                                 </div>
 
+                                <div class="col-md-6">
+                                    <label class="form-label" for="lpFloorFrom">Floor (moving from)</label>
+                                    <select class="form-select" id="lpFloorFrom" name="floor_from">
+                                        <option value="" selected>Select floor</option>
+                                        <option>Ground floor</option>
+                                        <option>1st floor</option>
+                                        <option>2nd floor</option>
+                                        <option>3rd floor</option>
+                                        <option>4th floor</option>
+                                        <option>5th floor</option>
+                                        <option>6th – 10th floor</option>
+                                        <option>Above 10th floor</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label" for="lpFloorTo">Floor (moving to)</label>
+                                    <select class="form-select" id="lpFloorTo" name="floor_to">
+                                        <option value="" selected>Select floor</option>
+                                        <option>Ground floor</option>
+                                        <option>1st floor</option>
+                                        <option>2nd floor</option>
+                                        <option>3rd floor</option>
+                                        <option>4th floor</option>
+                                        <option>5th floor</option>
+                                        <option>6th – 10th floor</option>
+                                        <option>Above 10th floor</option>
+                                    </select>
+                                </div>
+
                                 <div class="col-12">
                                     <label class="form-label" for="lpMessage">Additional details (optional)</label>
                                     <textarea class="form-control" id="lpMessage" name="message" rows="3"
-                                              placeholder="Home size, floor, items or other requirements"></textarea>
+                                              placeholder="Lift availability, items list or other requirements"></textarea>
                                 </div>
 
                                 <div class="col-12">

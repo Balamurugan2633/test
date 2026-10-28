@@ -7,6 +7,14 @@
 [build]
   publish = "regular-solution"
 
+# Because regular-solution/ is the site root, its pages live at /page.html, not
+# /regular-solution/page.html as they do under XAMPP. Send the old-style links
+# to the right place instead of a 404.
+[[redirects]]
+  from = "/regular-solution/*"
+  to = "/:splat"
+  status = 301
+
 # Netlify serves static files only — it does not execute PHP. Left alone, these
 # endpoints are handed to visitors as readable source, which would publish the
 # SMS credentials in api/config.php the moment they are filled in. Block them

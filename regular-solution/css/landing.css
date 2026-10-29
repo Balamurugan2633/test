@@ -15,6 +15,7 @@
    10. Closing CTA band
    11. Landing footer
    12. Responsive refinements
+   13. Home page additions (index.html)
    ========================================================================== */
 
 /* 1. Landing tokens ======================================================= */
@@ -562,7 +563,15 @@ body.lp .hp-field {
     gap: 28px;
 }
 
+/* Keep the copy to a readable width so the buttons sit beside it. */
+.lp-cta-grid > div:first-child {
+    flex: 1 1 420px;
+    max-width: 680px;
+}
+
+/* White, overriding the global navy heading colour in style.css. */
 .lp-cta h2 {
+    color: var(--white);
     font-size: clamp(1.7rem, 3vw, 2.4rem);
     font-weight: 800;
     margin-bottom: 8px;
@@ -593,7 +602,9 @@ body.lp .hp-field {
     margin-bottom: 12px;
 }
 
+/* Inherit the footer colour; the global `p` rule in style.css is dark grey. */
 .lp-footer p {
+    color: inherit;
     margin: 0 0 10px;
 }
 
@@ -677,5 +688,151 @@ body.lp .hp-field {
     .btn-lp-ghost,
     .lp-faq summary::before {
         transition: none;
+    }
+}
+
+/* 13. Home page additions (index.html) =================================== */
+.lp-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.lp-brand-tag {
+    color: var(--muted);
+    font-size: .85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.lp-nav {
+    display: flex;
+    gap: 22px;
+}
+
+.lp-nav a {
+    color: var(--secondary);
+    font-size: .92rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.lp-nav a:hover,
+.lp-nav a:focus-visible {
+    color: var(--lp-blue);
+}
+
+.lp-header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-sm-lp {
+    padding: 9px 16px;
+    font-size: .9rem;
+}
+
+.lp-card-link {
+    display: inline-block;
+    margin-top: 16px;
+    color: var(--lp-blue);
+    font-weight: 700;
+    font-size: .92rem;
+    text-decoration: none;
+}
+
+.lp-card-link:hover,
+.lp-card-link:focus-visible {
+    text-decoration: underline;
+}
+
+.lp-checklist {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 28px;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+.lp-checklist li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--white);
+    border: 1px solid var(--lp-line);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    color: var(--secondary);
+}
+
+.lp-checklist i {
+    color: var(--lp-orange);
+    font-size: 1.15rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 1199.98px) {
+    .lp-brand-tag {
+        display: none;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .lp-nav {
+        display: none;
+    }
+
+    /* The home page keeps the H1 first on mobile, with the form below it. */
+    .lp-hero--copy-first .lp-hero-form-col {
+        order: 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .lp-checklist {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .lp-header-actions .btn-lp-ghost span {
+        display: none;
+    }
+}
+
+/* Centre an incomplete last row of service cards instead of leaving a gap. */
+.lp-cards--center {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.lp-cards--center .lp-card {
+    flex: 0 1 calc((100% - 48px) / 3);
+}
+
+/* An odd last checklist item sits centred under the two columns. */
+.lp-checklist li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 14px);
+}
+
+@media (max-width: 991.98px) {
+    .lp-cards--center .lp-card {
+        flex-basis: calc((100% - 24px) / 2);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .lp-cards--center .lp-card {
+        flex-basis: 100%;
+    }
+
+    .lp-checklist li:last-child:nth-child(odd) {
+        width: 100%;
     }
 }

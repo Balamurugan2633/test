@@ -22,7 +22,7 @@ function rs_reject(string $message, int $status = 400): void
     if (rs_wants_json()) {
         rs_fail($message, $status);
     }
-    header('Location: ../index.html?error=' . rawurlencode($message) . '#booking');
+    header('Location: ../index.html?error=' . rawurlencode($message) . '#quote');
     exit;
 }
 

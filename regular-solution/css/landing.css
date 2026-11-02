@@ -637,8 +637,9 @@ body.lp .hp-field {
         order: -1;
     }
 
+    /* Stacked layout: go straight from the hero copy to the form. */
     .lp-hero-photo {
-        margin: 0 auto;
+        display: none;
     }
 
     .lp-cards,

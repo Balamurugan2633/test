@@ -15,6 +15,18 @@
   to = "/:splat"
   status = 301
 
+# The Google Ads landing page was merged into the home page. Keep any ad or
+# bookmark that still points at the old address working.
+[[redirects]]
+  from = "/packers-movers-chennai.html"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/packers-movers-chennai"
+  to = "/"
+  status = 301
+
 # Netlify serves static files only — it does not execute PHP. Left alone, these
 # endpoints are handed to visitors as readable source, which would publish the
 # SMS credentials in api/config.php the moment they are filled in. Block them

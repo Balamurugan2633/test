@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Regular Solution — Google Ads landing page (packers-movers-chennai.html)
+   Regular Solution — Chennai packers and movers home page (index.html)
    Standalone styles, loaded after style.css so the brand tokens defined there
    are reused. Nothing here affects the main site pages.
 
@@ -699,30 +699,6 @@ body.lp .hp-field {
     text-decoration: none;
 }
 
-.lp-brand-tag {
-    color: var(--muted);
-    font-size: .85rem;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.lp-nav {
-    display: flex;
-    gap: 22px;
-}
-
-.lp-nav a {
-    color: var(--secondary);
-    font-size: .92rem;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.lp-nav a:hover,
-.lp-nav a:focus-visible {
-    color: var(--lp-blue);
-}
-
 .lp-header-actions {
     display: flex;
     gap: 10px;
@@ -774,17 +750,7 @@ body.lp .hp-field {
     line-height: 1.4;
 }
 
-@media (max-width: 1199.98px) {
-    .lp-brand-tag {
-        display: none;
-    }
-}
-
 @media (max-width: 991.98px) {
-    .lp-nav {
-        display: none;
-    }
-
     /* The home page keeps the H1 first on mobile, with the form below it. */
     .lp-hero--copy-first .lp-hero-form-col {
         order: 0;

@@ -47,7 +47,6 @@ regular-solution/
 ├── blog.html               # Blog grid (6 posts) with pagination
 ├── contact.html            # Contact details, booking form, map, FAQ
 │
-├── packers-movers-chennai.html  # Google Ads landing page (no nav, single CTA)
 ├── privacy.html            # Privacy policy
 ├── terms.html              # Terms & conditions
 │
@@ -96,17 +95,8 @@ regular-solution/
 Floating buttons (WhatsApp bottom-left, phone bottom-right, orange *Download Now*) appear on
 every page.
 
-**packers-movers-chennai.html** — the paid-traffic landing page
-
-A deliberately stripped-down page for Google Ads moving campaigns: announcement bar, logo plus a
-single *Get Free Quote* button (no navigation, so a paid click converts instead of browsing),
-hero with the quote form, trust strip, six moving-service cards, three-step process, Chennai
-service-area chips, FAQ, closing CTA and a short footer. It is `noindex, follow` so it does not
-compete with `services.html` for the same query.
-
-It reuses the shared tokens in `style.css`, the OTP markup hooks from the home-page booking form
-(so `js/script.js` wires it up with no extra code) and `api/submit-form.php`, and adds only
-`css/landing.css` on top. Below 992px the form moves above the hero copy.
+**Google Ads traffic** — `packers-movers-chennai.html` was merged into `index.html`, which now
+serves paid and organic visitors alike. `netlify.toml` redirects the old address to the home page.
 
 ---
 

@@ -464,6 +464,35 @@
         return state;
     }
 
+    /* Posts a booking form to the PHP backend, which saves it for the admin
+       panel. Resolves with the Thank You page URL. Rejects with
+       err.noBackend = true when PHP is not running on this host. */
+    var BOOKING_API = 'api/submit-form.php';
+
+    function submitBooking(form) {
+        var body = new URLSearchParams(new FormData(form));
+
+        return fetch(BOOKING_API, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Accept': 'application/json', 'X-Requested-With': 'fetch' },
+            body: body
+        }).then(function (res) {
+            return res.json().catch(function () {
+                var e = new Error('No backend');
+                e.noBackend = true;
+                throw e;
+            }).then(function (json) {
+                if (!res.ok || !json.ok) {
+                    throw new Error(json.message || 'Something went wrong. Please try again.');
+                }
+                return new URL(json.redirect || '../thank-you.php', new URL(BOOKING_API, window.location.href)).href;
+            });
+        }, function () {
+            throw new Error('Could not reach the server. Check your connection and try again.');
+        });
+    }
+
     function initForms() {
         document.querySelectorAll('form.needs-validation').forEach(function (form) {
             var otp = null;
@@ -512,8 +541,9 @@
                     return;
                 }
 
-                // Valid (and verified, if OTP is on): let it post. Netlify Forms
-                // records it, emails it to you, and shows the Thank You page.
+                // Valid (and verified, if OTP is on): send it.
+                event.preventDefault();
+
                 var nameInput = form.querySelector('input[name="name"]');
                 if (nameInput) {
                     try {
@@ -522,10 +552,27 @@
                 }
 
                 var submit = form.querySelector('button[type="submit"]');
+                var label = submit ? submit.innerHTML : '';
                 if (submit) {
                     submit.disabled = true;
                     submit.textContent = 'Sending…';
                 }
+
+                submitBooking(form).then(function (redirect) {
+                    window.location.href = redirect;
+                }).catch(function (err) {
+                    if (err && err.noBackend) {
+                        // No PHP here (static hosting such as Netlify): post the
+                        // form normally so Netlify Forms records it instead.
+                        HTMLFormElement.prototype.submit.call(form);
+                        return;
+                    }
+                    if (submit) {
+                        submit.disabled = false;
+                        submit.innerHTML = label;
+                    }
+                    showFormMessage(form, err.message, false);
+                });
             });
         });
     }
@@ -554,13 +601,41 @@
             if (!input) return;
 
             var valid = input.checkValidity() && input.value.trim() !== '';
-            if (note) {
-                note.textContent = valid
-                    ? 'Thanks for subscribing! Look out for our service updates.'
-                    : 'Please enter a valid email address.';
+            function say(text) {
+                if (!note) return;
+                note.textContent = text;
                 note.classList.remove('d-none');
             }
-            if (valid) form.reset();
+            if (!valid) {
+                say('Please enter a valid email address.');
+                return;
+            }
+
+            var button = form.querySelector('button[type="submit"]');
+            if (button) button.disabled = true;
+
+            // Saved for Admin > Subscribers. Without PHP (static hosting) the
+            // visitor still gets the thank-you message.
+            var body = new URLSearchParams({ email: input.value.trim(), page: document.title });
+            fetch('api/subscribe.php', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: body
+            }).then(function (res) {
+                return res.json().then(function (json) {
+                    if (!json.ok) throw new Error(json.message);
+                    return json.message;
+                }, function () {
+                    return 'Thanks for subscribing! Look out for our service updates.';
+                });
+            }).then(function (message) {
+                say(message);
+                form.reset();
+            }).catch(function (err) {
+                say(err.message || 'Please try again in a moment.');
+            }).then(function () {
+                if (button) button.disabled = false;
+            });
         });
     }
 

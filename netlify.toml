@@ -40,3 +40,14 @@
   from = "/thank-you.php"
   to = "/404.html"
   status = 404
+
+# The admin panel and single-post page are PHP too; same reason as above.
+[[redirects]]
+  from = "/admin/*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/post.php"
+  to = "/404.html"
+  status = 404

@@ -22,6 +22,51 @@ http://localhost/test/regular-solution/index.html
 
 ---
 
+## Admin panel & blog
+
+Open `http://localhost/test/regular-solution/admin/` (needs PHP — XAMPP, not Netlify).
+
+| | |
+|---|---|
+| First login | username **admin**, password **Admin@123** (from `api/config.php`) |
+| After logging in | go to **Change Password** — a warning banner shows until you do |
+| Data | `api/storage/site.sqlite` (created automatically, blocked from the web) |
+| Cover images | `images/blog/uploads/` (script execution blocked there) |
+
+Menu: **Dashboard** (new/total requests, subscribers, blogs, latest requests) ·
+**Booking Requests** (every quote/contact form on the site — search, filter by status
+New/Contacted/Confirmed/Completed/Cancelled, call/WhatsApp buttons, private notes, delete,
+Excel/CSV export) · **Subscribers** (newsletter emails from every page, export) ·
+**Blogs** (search, filter, edit, delete) · **New Blog** (title, summary, content,
+category, slug, cover image, published/draft) · **Change Password** · **Logout**.
+
+**Website Settings** edits the details shared by every page — phone, WhatsApp, email,
+address, hours, map, logo, social links, footer text — plus the home page's announcement
+bar, heading, intro, call-to-action, footer and phone number. Saving rewrites those spots
+directly in the page files (each one is tagged in the HTML with `data-site="key"`,
+`data-site-href="tel:key"` or `data-site-src="key"`), so the pages stay static. A copy of
+each page is kept in `api/storage/backups/` (last 10 saves). To make another spot
+editable, add a field in `api/site-settings.php` and tag the element. For Netlify, commit
+and push the updated pages (and any new logo in `images/site/`) after saving.
+
+How requests get there: `js/script.js` posts the home and contact forms to
+`api/submit-form.php`, which saves them to the database (and still appends to
+`api/storage/submissions.csv` as a backup). On static hosting with no PHP, the forms
+fall back to a normal post so Netlify Forms records them instead. The newsletter box
+posts to `api/subscribe.php`.
+
+Published posts appear at the top of `blog.html` (loaded by `js/blog.js` from
+`api/posts.php`) and each has its own page at `post.php?slug=...`. Drafts stay hidden.
+
+Content formatting: blank line = new paragraph, `## ` = heading, `- ` = bullet point.
+
+Security: hashed passwords, 5 wrong attempts per IP locks login for 15 minutes,
+CSRF tokens on every form, auto logout after 60 idle minutes, all output escaped.
+Forgot the password? Delete the `admins` row (or the whole `site.sqlite`, which also
+deletes posts) and the account is recreated from `api/config.php` on next visit.
+
+---
+
 ## Tech stack
 
 | Layer | Used |

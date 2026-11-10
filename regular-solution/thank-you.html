@@ -37,7 +37,7 @@
             <div class="row align-items-center g-3">
                 <div class="col-lg-4 d-none d-lg-block">
                     <a class="brand-logo d-inline-block" href="index.html" aria-label="Regular Solution home">
-                        <img src="images/logo.png" alt="Regular Solution — all home services in Chennai" width="420" height="215">
+                        <img src="images/logo.png" data-site-src="logo" alt="Regular Solution — all home services in Chennai" width="420" height="215">
                     </a>
                 </div>
 
@@ -47,21 +47,21 @@
                             <span class="info-icon" aria-hidden="true"><i class="bi bi-clock-history"></i></span>
                             <span class="info-text">
                                 <span class="label">Open Everday</span>
-                                <span class="value">Mon &ndash; Sun, 24 Hhrs</span>
+                                <span class="value" data-site="hours">Mon – Sun, 24 Hhrs</span>
                             </span>
                         </li>
                         <li class="info-item">
                             <span class="info-icon" aria-hidden="true"><i class="bi bi-geo-alt-fill"></i></span>
                             <span class="info-text">
                                 <span class="label">Our Location</span>
-                                <span class="value">Thiruvanmiyur, Ch&#8209;41</span>
+                                <span class="value" data-site="location_short">Thiruvanmiyur, Ch‑41</span>
                             </span>
                         </li>
                         <li class="info-item">
                             <span class="info-icon" aria-hidden="true"><i class="bi bi-headset"></i></span>
                             <span class="info-text">
                                 <span class="label">Call Us Anytime</span>
-                                <a class="value" href="tel:18004199090">18004199090</a>
+                                <a class="value" href="tel:18004199090" data-site-href="tel:phone" data-site="phone">18004199090</a>
                             </span>
                         </li>
                     </ul>
@@ -74,7 +74,7 @@
     <nav class="navbar navbar-expand-lg main-nav" aria-label="Main navigation">
         <div class="container">
             <a class="navbar-brand nav-brand-mobile d-lg-none" href="index.html" aria-label="Regular Solution home">
-                <img src="images/logo.png" alt="Regular Solution" width="420" height="215">
+                <img src="images/logo.png" data-site-src="logo" alt="Regular Solution" width="420" height="215">
             </a>
 
             <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
@@ -94,9 +94,9 @@
 
                 <div class="d-flex align-items-center flex-wrap gap-3">
                     <div class="nav-social">
-                        <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Regular Solution on Facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Regular Solution on Instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="Regular Solution on YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="https://www.facebook.com/" data-site-href="url:facebook" target="_blank" rel="noopener" aria-label="Regular Solution on Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="https://www.instagram.com/" data-site-href="url:instagram" target="_blank" rel="noopener" aria-label="Regular Solution on Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="https://www.youtube.com/" data-site-href="url:youtube" target="_blank" rel="noopener" aria-label="Regular Solution on YouTube"><i class="bi bi-youtube"></i></a>
                     </div>
                     <a class="btn btn-accent" href="#download">Download Now</a>
                 </div>
@@ -106,10 +106,10 @@
 </header>
 
 <!-- ==================== FLOATING ACTION BUTTONS ==================== -->
-<a class="float-btn float-whatsapp" href="https://wa.me/918000000000" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
+<a class="float-btn float-whatsapp" href="https://wa.me/918000000000" data-site-href="wa:whatsapp" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
     <i class="bi bi-whatsapp" aria-hidden="true"></i>
 </a>
-<a class="float-btn float-phone" href="tel:18004199090" aria-label="Call Regular Solution">
+<a class="float-btn float-phone" href="tel:18004199090" data-site-href="tel:phone" aria-label="Call Regular Solution">
     <i class="bi bi-telephone-fill" aria-hidden="true"></i>
 </a>
 <a class="float-btn float-download" href="#download" aria-label="Download the Regular Solution app">
@@ -160,14 +160,14 @@
 
                 <div class="thankyou-actions">
                     <a class="btn btn-brand btn-lg" href="index.html">Back to Home</a>
-                    <a class="btn btn-outline-brand btn-lg" href="tel:18004199090">
-                        <i class="bi bi-telephone-fill me-2" aria-hidden="true"></i>Call 1800 419 9090
+                    <a class="btn btn-outline-brand btn-lg" href="tel:18004199090" data-site-href="tel:phone">
+                        <i class="bi bi-telephone-fill me-2" aria-hidden="true"></i>Call <span data-site="phone">18004199090</span>
                     </a>
                 </div>
 
                 <p class="thankyou-note">
                     Need it sooner? Message us on
-                    <a href="https://wa.me/918000000000" target="_blank" rel="noopener">WhatsApp</a>
+                    <a href="https://wa.me/918000000000" data-site-href="wa:whatsapp" target="_blank" rel="noopener">WhatsApp</a>
                     and we will pick it up right away.
                 </p>
             </div>
@@ -182,19 +182,15 @@
         <div class="row g-4">
             <div class="col-lg-4 col-md-6">
                 <div class="footer-logo">
-                    <img src="images/logo.png" alt="Regular Solution" width="420" height="215" loading="lazy">
+                    <img src="images/logo.png" data-site-src="logo" alt="Regular Solution" width="420" height="215" loading="lazy">
                 </div>
                 <h2 class="visually-hidden">About Regular Solution</h2>
-                <p>
-                    Regular Solution is Chennai's single platform for trusted home services. We connect
-                    families with verified professionals for AC service, cleaning, electrical, plumbing,
-                    painting, shifting and more — at transparent prices, all day, every day.
-                </p>
+                <p data-site="footer_about">Regular Solution is Chennai&#039;s single platform for trusted home services. We connect families with verified professionals for AC service, cleaning, electrical, plumbing, painting, shifting and more — at transparent prices, all day, every day.</p>
                 <div class="footer-social">
-                    <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                    <a href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
-                    <a href="https://wa.me/918000000000" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+                    <a href="https://www.facebook.com/" data-site-href="url:facebook" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="https://www.instagram.com/" data-site-href="url:instagram" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="https://www.youtube.com/" data-site-href="url:youtube" target="_blank" rel="noopener" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                    <a href="https://wa.me/918000000000" data-site-href="wa:whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
                 </div>
             </div>
 
@@ -230,19 +226,19 @@
                 <ul class="footer-contact list-clean">
                     <li>
                         <i class="bi bi-telephone-fill" aria-hidden="true"></i>
-                        <span><a href="tel:18004199090">18004199090</a></span>
+                        <span><a href="tel:18004199090" data-site-href="tel:phone" data-site="phone">18004199090</a></span>
                     </li>
                     <li>
                         <i class="bi bi-envelope-fill" aria-hidden="true"></i>
-                        <span><a href="mailto:info@example.com">info@example.com</a></span>
+                        <span><a href="mailto:info@example.com" data-site-href="mailto:email" data-site="email">info@example.com</a></span>
                     </li>
                     <li>
                         <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
-                        <span>No.31/12, Avvai Nagar,<br>Thiruvanmiyur, Chennai &ndash; 600041</span>
+                        <span data-site="address">No.31/12, Avvai Nagar,<br>Thiruvanmiyur, Chennai – 600041</span>
                     </li>
                     <li>
                         <i class="bi bi-clock-fill" aria-hidden="true"></i>
-                        <span>Mon &ndash; Sun, 24 Hhrs</span>
+                        <span data-site="hours">Mon – Sun, 24 Hhrs</span>
                     </li>
                 </ul>
             </div>
@@ -251,7 +247,7 @@
         <div class="footer-bottom">
             <div class="row align-items-center g-2">
                 <div class="col-md-6">
-                    <p>&copy; <span data-current-year>2026</span> Regular Solution. All Rights Reserved.</p>
+                    <p>&copy; <span data-current-year>2026</span> <span data-site="copyright">Regular Solution. All Rights Reserved.</span></p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p>Designed for Chennai homes &bull; <a href="contact.html">Get in touch</a></p>

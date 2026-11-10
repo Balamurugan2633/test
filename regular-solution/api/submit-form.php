@@ -6,7 +6,7 @@
  */
 
 declare(strict_types=1);
-require __DIR__ . '/bootstrap.php';
+require_once __DIR__ . '/blog-lib.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Location: ../index.html');
@@ -68,7 +68,14 @@ $record = [
     'ip'        => $_SERVER['REMOTE_ADDR'] ?? '',
 ];
 
-// Always keep a copy on disk.
+// Shown in Admin > Booking Requests.
+try {
+    rs_booking_create($record);
+} catch (Throwable $e) {
+    rs_log('errors.log', 'booking not saved to database: ' . $e->getMessage());
+}
+
+// Always keep a copy on disk as well.
 $csv    = rs_storage_dir() . '/submissions.csv';
 $isNew  = !file_exists($csv);
 if ($handle = @fopen($csv, 'a')) {

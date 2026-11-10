@@ -1,3 +1,7 @@
 # Runtime data written by the form backend (leads, OTP log) - never commit.
 regular-solution/api/storage/*
 !regular-solution/api/storage/.htaccess
+
+# Blog cover images uploaded from the admin panel - runtime data.
+regular-solution/images/blog/uploads/*
+!regular-solution/images/blog/uploads/.htaccess

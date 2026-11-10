@@ -62,4 +62,20 @@ return [
     'notify_email' => '',
 
     'site_name' => 'Regular Solution',
+
+    // --- Admin panel (/admin/) --------------------------------------------
+
+    // Used ONLY to create the admin account the first time the panel runs.
+    // After that the password lives (hashed) in api/storage/site.sqlite and
+    // is changed from Admin > Change Password — editing it here does nothing.
+    'admin' => [
+        'username' => 'admin',
+        'password' => 'Admin@123',
+    ],
+
+    // Wrong passwords allowed per IP within 15 minutes before login locks.
+    'admin_max_attempts' => 5,
+
+    // Sign the admin out after this many minutes without activity.
+    'admin_idle_minutes' => 60,
 ];

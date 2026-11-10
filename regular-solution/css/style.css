@@ -1603,6 +1603,58 @@ textarea:focus-visible,
     margin-bottom: 16px;
 }
 
+/* Single post page (post.php) */
+.post-article {
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.post-cover {
+    width: 100%;
+    height: auto;
+    max-height: 460px;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    margin-bottom: 32px;
+}
+
+.post-content {
+    font-size: 1.02rem;
+    line-height: 1.85;
+    color: var(--dark);
+}
+
+.post-content h2 {
+    font-size: 1.4rem;
+    color: var(--secondary);
+    margin: 32px 0 12px;
+}
+
+.post-content ul {
+    padding-left: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.post-content li {
+    margin-bottom: 6px;
+}
+
+.post-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 36px;
+    padding: 22px 26px;
+    background: var(--light-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-weight: 500;
+    color: var(--secondary);
+}
+
 /* 18. Newsletter ========================================================== */
 .newsletter {
     background: linear-gradient(120deg, var(--primary) 0%, #3560cf 100%);

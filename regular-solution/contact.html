@@ -200,8 +200,9 @@
 
                 <div class="col-lg-7 reveal" data-reveal-delay="120">
                     <div class="booking-panel h-100">
-                        <form class="needs-validation" action="api/submit-form.php" method="post"
-                              data-otp-form novalidate>
+                        <form class="needs-validation" name="contact-request" action="/thank-you.html" method="post"
+                              data-netlify="true" netlify-honeypot="company" data-otp-form novalidate>
+                            <input type="hidden" name="form-name" value="contact-request">
                             <input type="hidden" name="form_name" value="Contact page request">
                             <!-- Honeypot: hidden from people, filled in by bots -->
                             <div class="hp-field" aria-hidden="true">

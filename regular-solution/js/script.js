@@ -281,6 +281,12 @@
     }
 
     /* 7. Booking / contact forms + OTP verification ======================== */
+
+    // OTP SWITCH — set to true once SMS OTP is live (also set 'otp_enabled'
+    // => true in api/config.php). While false, the Send OTP button and code
+    // box are hidden and forms submit without phone verification.
+    var OTP_ENABLED = false;
+
     function showFormMessage(form, message, isSuccess) {
         var box = form.querySelector('[data-form-message]');
         if (!box) return;
@@ -460,7 +466,17 @@
 
     function initForms() {
         document.querySelectorAll('form.needs-validation').forEach(function (form) {
-            var otp = form.hasAttribute('data-otp-form') ? initOtp(form) : null;
+            var otp = null;
+            if (form.hasAttribute('data-otp-form')) {
+                if (OTP_ENABLED) {
+                    otp = initOtp(form);
+                } else {
+                    // OTP switched off: hide its controls, fall back to the plain tel check
+                    form.querySelectorAll('[data-otp-send], [data-otp-box]').forEach(function (el) {
+                        el.classList.add('d-none');
+                    });
+                }
+            }
 
             // Plain tel check for any form without the OTP flow
             if (!otp) {
@@ -496,8 +512,15 @@
                     return;
                 }
 
-                // Valid and verified: let it post to the server, which records
-                // the request and redirects to the Thank You page.
+                // Valid (and verified, if OTP is on): let it post. Netlify Forms
+                // records it, emails it to you, and shows the Thank You page.
+                var nameInput = form.querySelector('input[name="name"]');
+                if (nameInput) {
+                    try {
+                        sessionStorage.setItem('rsThanksName', nameInput.value.trim().split(/\s+/)[0]);
+                    } catch (e) { /* storage blocked: page just says "Thank you!" */ }
+                }
+
                 var submit = form.querySelector('button[type="submit"]');
                 if (submit) {
                     submit.disabled = true;
@@ -505,6 +528,17 @@
                 }
             });
         });
+    }
+
+    /* Thank You page: greet the visitor by first name if we have it. */
+    function initThanksName() {
+        var slot = document.querySelector('[data-thanks-name]');
+        if (!slot) return;
+        try {
+            var first = sessionStorage.getItem('rsThanksName');
+            sessionStorage.removeItem('rsThanksName');
+            if (first) slot.textContent = ', ' + first;
+        } catch (e) { /* storage blocked */ }
     }
 
     /* 8. Newsletter form validation ======================================= */
@@ -540,6 +574,7 @@
         initSlideshows();
         initTestimonialSlider();
         initForms();
+        initThanksName();
         initNewsletter();
     });
 })();

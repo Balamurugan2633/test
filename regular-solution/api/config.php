@@ -16,6 +16,10 @@
 
 return [
 
+    // OTP SWITCH — false = forms are accepted without phone verification.
+    // Set to true once SMS OTP is live (also set OTP_ENABLED = true in js/script.js).
+    'otp_enabled' => false,
+
     // 'log' | 'msg91' | 'fast2sms' | 'twilio'
     'sms_provider' => 'log',
 

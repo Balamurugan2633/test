@@ -34,7 +34,8 @@ if (rs_post('company') !== '') {
 if ($phone === '') {
     rs_reject('Enter a valid 10-digit mobile number.');
 }
-if ($verified === '' || !hash_equals($verified, $phone)) {
+$otpOn = rs_config()['otp_enabled'] ?? true;
+if ($otpOn && ($verified === '' || !hash_equals($verified, $phone))) {
     rs_reject('Please verify your mobile number with the OTP before submitting.', 403);
 }
 

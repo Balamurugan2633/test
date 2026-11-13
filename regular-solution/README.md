@@ -214,7 +214,7 @@ change the title, description and `images/services/<name>.jpg`, then add the opt
 `Select Service` dropdown in the booking form.
 
 **Change contact details** — the phone number appears in the top bar, floating button, footer and
-form success message; search for `18004199090`. The address lives in the footer and on
+form success message; search for `8925516635`. The address lives in the footer and on
 `contact.html`.
 
 **Connect the form to a backend** — in `js/script.js`, replace the success branch of

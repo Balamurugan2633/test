@@ -6,9 +6,12 @@
 declare(strict_types=1);
 
 if (session_status() === PHP_SESSION_NONE) {
+    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+          || strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
     session_set_cookie_params([
         'httponly' => true,
         'samesite' => 'Lax',
+        'secure'   => $https, // cookie never travels over plain HTTP on the live site
     ]);
     session_start();
 }

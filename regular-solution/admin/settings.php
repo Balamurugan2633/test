@@ -64,7 +64,7 @@ $tabs = [
 $tab        = isset($tabs[$tab]) ? $tab : 'contact';
 $errorTabs  = array_unique(array_map(fn ($k) => $fields[$k][0], array_keys($errors)));
 $fieldIcons = [
-    'phone' => 'bi-telephone', 'whatsapp' => 'bi-whatsapp', 'email' => 'bi-envelope', 'location_short' => 'bi-pin-map',
+    'phone' => 'bi-telephone', 'phone2' => 'bi-telephone', 'whatsapp' => 'bi-whatsapp', 'email' => 'bi-envelope', 'location_short' => 'bi-pin-map',
     'hours' => 'bi-clock', 'map_query' => 'bi-map', 'facebook' => 'bi-facebook', 'instagram' => 'bi-instagram',
     'youtube' => 'bi-youtube', 'landing_phone' => 'bi-telephone', 'website' => 'bi-globe2', 'copyright' => 'bi-c-circle',
 ];

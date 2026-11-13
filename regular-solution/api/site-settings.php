@@ -30,9 +30,10 @@ function rs_setting_fields(): array
 {
     return [
         // Contact details (all pages)
-        'phone'          => ['contact', 'Main phone number', 'tel', '18004199090', 'Shown in the top bar, footer, contact page and call buttons on every page except the home page.'],
-        'whatsapp'       => ['contact', 'WhatsApp number', 'tel', '918000000000', 'With country code, e.g. 919876543210. Used by every WhatsApp button.'],
-        'email'          => ['contact', 'Email address', 'email', 'info@example.com', ''],
+        'phone'          => ['contact', 'Main phone number', 'tel', '8925516635', 'Shown in the top bar, footer, contact page and call buttons on every page except the home page.'],
+        'phone2'         => ['contact', 'Second phone number', 'tel', '8925516636', 'Shown next to the main number in the footer and on the contact and thank-you pages.'],
+        'whatsapp'       => ['contact', 'WhatsApp number', 'tel', '918925516635', 'With country code, e.g. 919876543210. Used by every WhatsApp button.'],
+        'email'          => ['contact', 'Email address', 'email', 'info@regularsolution.com', ''],
         'address'        => ['contact', 'Office address', 'textarea', "No.31/12, Avvai Nagar,\nThiruvanmiyur, Chennai – 600041", 'Use a new line where the footer should break the address.'],
         'location_short' => ['contact', 'Short location (top bar)', 'text', 'Thiruvanmiyur, Ch‑41', ''],
         'hours'          => ['contact', 'Opening hours', 'text', 'Mon – Sun, 24 Hhrs', ''],
@@ -164,6 +165,7 @@ function rs_marker_html(array $s): array
     $lines = array_values(array_filter(array_map('trim', explode("\n", $s['address']))));
     return [
         'phone'              => e($s['phone']),
+        'phone2'             => e($s['phone2']),
         'landing_phone'      => e($s['landing_phone']),
         'email'              => e($s['email']),
         'address'            => implode('<br>', array_map('e', $lines)),

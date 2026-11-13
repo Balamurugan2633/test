@@ -66,6 +66,61 @@ body.lp {
     text-decoration: underline;
 }
 
+/* Header menu (Home, About Us, Services, Blog, Contact), centered between
+   the logo and the Free Quote button. */
+.lp-topnav {
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 32px;
+}
+
+.lp-topnav a {
+    color: var(--secondary);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color .2s var(--ease);
+}
+
+.lp-topnav a:hover,
+.lp-topnav a:focus-visible,
+.lp-topnav a[aria-current="page"] {
+    color: var(--lp-orange);
+}
+
+/* Tablet & mobile: menu moves to its own centered row under the logo. */
+@media (max-width: 991.98px) {
+    .lp-header .container {
+        flex-wrap: wrap;
+    }
+
+    .lp-topnav {
+        order: 3;
+        flex-basis: 100%;
+        gap: 4px 20px;
+        padding-top: 10px;
+        border-top: 1px solid var(--lp-line);
+    }
+}
+
+/* Social icons in the white header: hover turns navy (the global hover
+   turns them white, which would vanish on a white background). */
+.lp-header .nav-social a:hover,
+.lp-header .nav-social a:focus-visible {
+    background-color: var(--secondary);
+    color: var(--white);
+}
+
+/* After a mouse click (e.g. returning from the opened social tab) the link
+   keeps focus; keep the normal blue circle instead of the white focus style. */
+.lp-header .nav-social a:focus:not(:focus-visible):not(:hover) {
+    background-color: var(--primary);
+    color: var(--white);
+    transform: none;
+}
+
 .lp-header {
     background: var(--white);
     border-bottom: 1px solid var(--lp-line);
@@ -90,7 +145,9 @@ body.lp {
 /* 3. Hero + quote form =================================================== */
 .lp-hero {
     background: linear-gradient(180deg, var(--lp-soft) 0%, var(--white) 100%);
-    padding: 56px 0 0;
+    /* Bottom padding lives here (not on the form card) so the hero photo
+       and the form card both end on the same line. */
+    padding: 56px 0 40px;
     overflow: hidden;
 }
 
@@ -190,12 +247,22 @@ body.lp {
     margin-right: 6px;
 }
 
+/* Copy column fills the full hero height so the photo can sit on the
+   bottom edge (on the line above the trust bar), centered in the column. */
+.lp-hero-copy-col {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .lp-hero-photo {
     display: block;
     width: 100%;
     max-width: 330px;
     height: auto;
-    margin-top: 8px;
+    margin-top: auto;
+    align-self: center;
 }
 
 /* Quote card */
@@ -205,7 +272,6 @@ body.lp {
     border-radius: var(--radius);
     box-shadow: var(--shadow-lg);
     padding: 28px;
-    margin-bottom: 40px;
 }
 
 .lp-quote h2 {
@@ -504,8 +570,22 @@ body.lp .hp-field {
 
 /* 9. FAQ ================================================================= */
 .lp-faq {
-    max-width: 52rem;
+    max-width: 72rem;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 48px;
+    align-items: start;
+}
+
+.lp-faq-col {
+    min-width: 0;
+}
+
+@media (max-width: 767.98px) {
+    .lp-faq {
+        grid-template-columns: 1fr;
+    }
 }
 
 .lp-faq details {
@@ -549,10 +629,11 @@ body.lp .hp-field {
 }
 
 /* 10. Closing CTA band =================================================== */
+/* A rounded navy card on a white band. The white space around it keeps it
+   separate from the navy footer below. */
 .lp-cta {
-    background: var(--lp-navy);
-    color: var(--white);
-    padding: 60px 0;
+    background: var(--white);
+    padding: 64px 0;
 }
 
 .lp-cta-grid {
@@ -561,6 +642,14 @@ body.lp .hp-field {
     align-items: center;
     justify-content: space-between;
     gap: 28px;
+    background: var(--lp-navy);
+    border-radius: 20px;
+    padding: 44px 48px;
+    box-shadow: 0 18px 40px rgba(22, 41, 77, .22);
+}
+
+.lp-cta .lp-actions {
+    flex: 0 0 auto;
 }
 
 /* Keep the copy to a readable width so the buttons sit beside it. */
@@ -582,9 +671,18 @@ body.lp .hp-field {
     margin: 0;
 }
 
+/* Call button keeps the standard orange; Quote button is white. */
 .lp-cta .btn-lp-ghost {
     background: var(--white);
     border-color: var(--white);
+    color: var(--secondary);
+}
+
+.lp-cta .btn-lp-ghost:hover,
+.lp-cta .btn-lp-ghost:focus-visible {
+    background: transparent;
+    border-color: var(--white);
+    color: var(--white);
 }
 
 /* 11. Landing footer ===================================================== */
@@ -624,6 +722,11 @@ body.lp .hp-field {
         grid-template-columns: 1fr minmax(340px, 420px);
         gap: 32px;
     }
+
+    /* Hide the hero photo on mobile and tablet (portrait and landscape). */
+    .lp-hero-photo {
+        display: none;
+    }
 }
 
 @media (max-width: 991.98px) {
@@ -635,11 +738,6 @@ body.lp .hp-field {
 
     .lp-hero-form-col {
         order: -1;
-    }
-
-    /* Stacked layout: go straight from the hero copy to the form. */
-    .lp-hero-photo {
-        display: none;
     }
 
     .lp-cards,
@@ -672,6 +770,19 @@ body.lp .hp-field {
         padding: 22px 18px;
     }
 
+    .lp-cta {
+        padding: 40px 0;
+    }
+
+    .lp-cta-grid {
+        padding: 30px 20px;
+        border-radius: 16px;
+    }
+
+    .lp-cta .lp-actions {
+        flex: 1 1 100%;
+    }
+
     .lp-actions .btn-lp-orange,
     .lp-actions .btn-lp-ghost {
         width: 100%;
@@ -680,6 +791,28 @@ body.lp .hp-field {
 
     .lp-header img {
         height: 38px;
+    }
+
+    .lp-topnav {
+        gap: 4px 16px;
+    }
+
+    .lp-topnav a {
+        font-size: .92rem;
+    }
+
+    .lp-header-actions {
+        gap: 10px;
+    }
+
+    .lp-header .nav-social {
+        gap: 6px;
+    }
+
+    .lp-header .nav-social a {
+        width: 34px;
+        height: 34px;
+        font-size: .95rem;
     }
 }
 
@@ -702,7 +835,8 @@ body.lp .hp-field {
 
 .lp-header-actions {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 16px;
 }
 
 .btn-sm-lp {

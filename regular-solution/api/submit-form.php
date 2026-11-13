@@ -96,11 +96,23 @@ if ($to !== '') {
     foreach ($record as $key => $value) {
         $body .= str_pad(ucfirst($key) . ':', 12) . $value . "\n";
     }
+    // Send from an address on this domain (e.g. no-reply@regularsolution.in);
+    // Gmail rejects or spams mail whose sender doesn't match the server.
+    $host    = preg_replace('/^www\./i', '', strtolower(explode(':', $_SERVER['HTTP_HOST'] ?? 'localhost')[0]));
+    $from    = 'no-reply@' . $host;
+    $headers = [
+        'From: ' . rs_config()['site_name'] . ' <' . $from . '>',
+        'Content-Type: text/plain; charset=utf-8',
+    ];
+    if ($mail !== '') {
+        $headers[] = 'Reply-To: ' . str_replace(["\r", "\n"], '', $mail);
+    }
     @mail(
         $to,
-        'New ' . $record['form'] . ' — ' . $name,
+        '=?UTF-8?B?' . base64_encode('New ' . $record['form'] . ' — ' . $name) . '?=',
         $body,
-        'Content-Type: text/plain; charset=utf-8'
+        implode("\r\n", $headers),
+        '-f' . $from
     );
 }
 

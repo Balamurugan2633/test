@@ -143,6 +143,45 @@
                             <li><i class="bi bi-check-lg" aria-hidden="true"></i>Customized moving estimates</li>
                         </ul>
 
+                        <!-- Fills the space beside the tall quote form on desktop
+                             (hidden in the stacked tablet/mobile layout). -->
+                        <div class="lp-hero-extras">
+                            <p class="lp-mini-title">Get your quote in 3 simple steps</p>
+                            <ol class="lp-mini-steps">
+                                <li>
+                                    <span class="lp-mini-icon"><i class="bi bi-ui-checks" aria-hidden="true"></i></span>
+                                    <strong>Share your move</strong>
+                                    <span>Fill in the quick form with your route and date.</span>
+                                </li>
+                                <li>
+                                    <span class="lp-mini-icon"><i class="bi bi-search" aria-hidden="true"></i></span>
+                                    <strong>We review it</strong>
+                                    <span>Our team checks your route, house size and date.</span>
+                                </li>
+                                <li>
+                                    <span class="lp-mini-icon"><i class="bi bi-receipt" aria-hidden="true"></i></span>
+                                    <strong>Get your estimate</strong>
+                                    <span>Receive a customized quote for your move.</span>
+                                </li>
+                            </ol>
+
+                            <div class="lp-talk">
+                                <span class="lp-talk-icon"><i class="bi bi-headset" aria-hidden="true"></i></span>
+                                <div class="lp-talk-text">
+                                    <strong>Prefer to talk?</strong>
+                                    <span>Speak to our team about your move.</span>
+                                </div>
+                                <div class="lp-talk-actions">
+                                    <a class="lp-talk-btn lp-talk-btn--call" href="tel:8925516635" data-site-href="tel:landing_phone">
+                                        <i class="bi bi-telephone-fill" aria-hidden="true"></i>Call
+                                    </a>
+                                    <a class="lp-talk-btn lp-talk-btn--wa" href="https://wa.me/918925516635" data-site-href="wa:whatsapp" target="_blank" rel="noopener">
+                                        <i class="bi bi-whatsapp" aria-hidden="true"></i>WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <img class="lp-hero-photo" src="images/hero/packers-and-movers.webp"
                             alt="Regular Solution packing professional holding a sealed carton" width="539"
                             height="741">
@@ -151,11 +190,19 @@
                     <!-- 2. Quick quote form -->
                     <div class="lp-hero-form-col" id="quote">
                         <div class="lp-quote">
-                            <h2>Get Your Free Moving Quote</h2>
-                            <p class="lp-quote-sub">
-                                Tell us a few details about your move. Our team can use them to understand your
-                                requirements.
-                            </p>
+                            <div class="lp-quote-head">
+                                <span class="lp-quote-badge"><i class="bi bi-stars" aria-hidden="true"></i>Free &middot; No obligation</span>
+                                <h2>Get Your Free Moving Quote</h2>
+                                <p class="lp-quote-sub">
+                                    Tell us a few details about your move. Our team can use them to understand your
+                                    requirements.
+                                </p>
+                                <ul class="lp-quote-perks">
+                                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Free estimate</li>
+                                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i>No obligation</li>
+                                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Details kept private</li>
+                                </ul>
+                            </div>
 
                             <form class="needs-validation" name="home-quote" action="/thank-you.html" method="post"
                                 data-netlify="true" netlify-honeypot="company" data-otp-form novalidate>
@@ -167,146 +214,198 @@
                                     <input type="text" id="qCompany" name="company" tabindex="-1" autocomplete="off">
                                 </div>
 
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label class="form-label" for="qName">Full name *</label>
-                                        <input class="form-control" type="text" id="qName" name="name"
-                                            autocomplete="name" placeholder="Your full name" required>
-                                        <div class="invalid-feedback">Please enter your name.</div>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label" for="qPhone">Phone number *</label>
-                                        <div class="otp-row">
-                                            <input class="form-control" type="tel" id="qPhone" name="phone"
-                                                inputmode="numeric" autocomplete="tel" maxlength="15"
-                                                placeholder="10-digit mobile number" required data-otp-phone>
-                                            <button class="btn btn-otp" type="button" data-otp-send>Send OTP</button>
-                                        </div>
-                                        <div class="invalid-feedback">Enter a valid 10-digit mobile number.</div>
-
-                                        <div class="otp-box d-none" data-otp-box>
-                                            <label class="form-label" for="qOtp">Enter the 6-digit OTP</label>
-                                            <div class="otp-row">
-                                                <input class="form-control otp-code" type="text" id="qOtp"
-                                                    inputmode="numeric" maxlength="6" placeholder="------"
-                                                    autocomplete="one-time-code" data-otp-input>
-                                                <button class="btn btn-otp" type="button"
-                                                    data-otp-verify>Verify</button>
+                                <!-- Step 1: contact details -->
+                                <fieldset class="lp-fs">
+                                    <legend class="lp-qstep"><span class="lp-step-num">1</span>Your details</legend>
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="form-label" for="qName">Full name <span class="req" aria-hidden="true">*</span></label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-person lp-field-icon" aria-hidden="true"></i>
+                                                <input class="form-control" type="text" id="qName" name="name"
+                                                    autocomplete="name" placeholder="Your full name" required>
+                                                <div class="invalid-feedback">Please enter your name.</div>
                                             </div>
-                                            <p class="otp-note" data-otp-note aria-live="polite"></p>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label" for="qPhone">Phone number <span class="req" aria-hidden="true">*</span></label>
+                                            <!-- The phone input must stay a direct child of .otp-row:
+                                                 js/script.js marks its parent as verified. -->
+                                            <div class="otp-row lp-field">
+                                                <i class="bi bi-phone lp-field-icon" aria-hidden="true"></i>
+                                                <input class="form-control" type="tel" id="qPhone" name="phone"
+                                                    inputmode="numeric" autocomplete="tel" maxlength="15"
+                                                    placeholder="10-digit mobile number" required data-otp-phone>
+                                                <button class="btn btn-otp" type="button" data-otp-send>Send OTP</button>
+                                            </div>
+                                            <div class="invalid-feedback">Enter a valid 10-digit mobile number.</div>
+
+                                            <div class="otp-box d-none" data-otp-box>
+                                                <label class="form-label" for="qOtp">Enter the 6-digit OTP</label>
+                                                <div class="otp-row">
+                                                    <input class="form-control otp-code" type="text" id="qOtp"
+                                                        inputmode="numeric" maxlength="6" placeholder="••••••"
+                                                        autocomplete="one-time-code" data-otp-input>
+                                                    <button class="btn btn-otp" type="button"
+                                                        data-otp-verify>Verify</button>
+                                                </div>
+                                                <p class="otp-note" data-otp-note aria-live="polite"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label" for="qEmail">Email address <span class="opt">(optional)</span></label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-envelope lp-field-icon" aria-hidden="true"></i>
+                                                <input class="form-control" type="email" id="qEmail" name="email"
+                                                    autocomplete="email" placeholder="you@example.com">
+                                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                                            </div>
                                         </div>
                                     </div>
+                                </fieldset>
 
-                                    <div class="col-12">
-                                        <label class="form-label" for="qEmail">Email address</label>
-                                        <input class="form-control" type="email" id="qEmail" name="email"
-                                            autocomplete="email" placeholder="you@example.com">
-                                        <div class="invalid-feedback">Please enter a valid email address.</div>
-                                    </div>
+                                <!-- Step 2: what is moving -->
+                                <fieldset class="lp-fs">
+                                    <legend class="lp-qstep"><span class="lp-step-num">2</span>Move details</legend>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="qService">Moving service <span class="req" aria-hidden="true">*</span></label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-box-seam lp-field-icon" aria-hidden="true"></i>
+                                                <select class="form-select" id="qService" name="service" required>
+                                                    <option value="" selected disabled>Select service</option>
+                                                    <option>House Shifting</option>
+                                                    <option>Office Relocation</option>
+                                                    <option>Local Shifting</option>
+                                                    <option>Intercity Relocation</option>
+                                                    <option>Car &amp; Bike Transport</option>
+                                                    <option>Packing &amp; Storage</option>
+                                                </select>
+                                                <div class="invalid-feedback">Please select a moving service.</div>
+                                            </div>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="qService">Moving service *</label>
-                                        <select class="form-select" id="qService" name="service" required>
-                                            <option value="" selected disabled>Select service</option>
-                                            <option>House Shifting</option>
-                                            <option>Office Relocation</option>
-                                            <option>Local Shifting</option>
-                                            <option>Intercity Relocation</option>
-                                            <option>Car &amp; Bike Transport</option>
-                                            <option>Packing &amp; Storage</option>
-                                        </select>
-                                        <div class="invalid-feedback">Please select a moving service.</div>
-                                    </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="qDate">Moving date</label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-calendar3 lp-field-icon" aria-hidden="true"></i>
+                                                <input class="form-control" type="date" id="qDate" name="date">
+                                            </div>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="qDate">Preferred moving date</label>
-                                        <input class="form-control" type="date" id="qDate" name="date">
-                                    </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="qMoveType">Move type</label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-signpost-split lp-field-icon" aria-hidden="true"></i>
+                                                <select class="form-select" id="qMoveType" name="move_type">
+                                                    <option value="" selected>Select type</option>
+                                                    <option>Within city</option>
+                                                    <option>Intercity</option>
+                                                    <option>Outer city</option>
+                                                    <option>Part load</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="qMoveType">Move type</label>
-                                        <select class="form-select" id="qMoveType" name="move_type">
-                                            <option value="" selected>Select move type</option>
-                                            <option>Within city</option>
-                                            <option>Intercity</option>
-                                            <option>Outer city</option>
-                                            <option>Part load</option>
-                                        </select>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="qHouseType">House type</label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-house-door lp-field-icon" aria-hidden="true"></i>
+                                                <select class="form-select" id="qHouseType" name="house_type">
+                                                    <option value="" selected>Select size</option>
+                                                    <option>1 RK</option>
+                                                    <option>1 BHK</option>
+                                                    <option>2 BHK</option>
+                                                    <option>3 BHK</option>
+                                                    <option>4 BHK+</option>
+                                                    <option>Villa / Independent house</option>
+                                                    <option>Office / Commercial</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
+                                </fieldset>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="qHouseType">House type</label>
-                                        <select class="form-select" id="qHouseType" name="house_type">
-                                            <option value="" selected>Select house type</option>
-                                            <option>1 RK</option>
-                                            <option>1 BHK</option>
-                                            <option>2 BHK</option>
-                                            <option>3 BHK</option>
-                                            <option>4 BHK+</option>
-                                            <option>Villa / Independent house</option>
-                                            <option>Office / Commercial</option>
-                                        </select>
-                                    </div>
+                                <!-- Step 3: route -->
+                                <fieldset class="lp-fs">
+                                    <legend class="lp-qstep"><span class="lp-step-num">3</span>Pickup &amp; drop</legend>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="qFrom">Moving from</label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-geo-alt lp-field-icon" aria-hidden="true"></i>
+                                                <input class="form-control" type="text" id="qFrom" name="from"
+                                                    placeholder="Area / city">
+                                            </div>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="qFrom">Moving from</label>
-                                        <input class="form-control" type="text" id="qFrom" name="from"
-                                            placeholder="Area / city">
-                                    </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="qTo">Moving to</label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-geo-alt-fill lp-field-icon" aria-hidden="true"></i>
+                                                <input class="form-control" type="text" id="qTo" name="to"
+                                                    placeholder="Area / city">
+                                            </div>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="qTo">Moving to</label>
-                                        <input class="form-control" type="text" id="qTo" name="to"
-                                            placeholder="Area / city">
-                                    </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="qFloorFrom">Floor (from)</label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-building lp-field-icon" aria-hidden="true"></i>
+                                                <select class="form-select" id="qFloorFrom" name="floor_from">
+                                                    <option value="" selected>Select floor</option>
+                                                    <option>Ground floor</option>
+                                                    <option>1st floor</option>
+                                                    <option>2nd floor</option>
+                                                    <option>3rd floor</option>
+                                                    <option>4th floor</option>
+                                                    <option>5th floor</option>
+                                                    <option>6th – 10th floor</option>
+                                                    <option>Above 10th floor</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="qFloorFrom">Floor (moving from)</label>
-                                        <select class="form-select" id="qFloorFrom" name="floor_from">
-                                            <option value="" selected>Select floor</option>
-                                            <option>Ground floor</option>
-                                            <option>1st floor</option>
-                                            <option>2nd floor</option>
-                                            <option>3rd floor</option>
-                                            <option>4th floor</option>
-                                            <option>5th floor</option>
-                                            <option>6th – 10th floor</option>
-                                            <option>Above 10th floor</option>
-                                        </select>
-                                    </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="qFloorTo">Floor (to)</label>
+                                            <div class="lp-field">
+                                                <i class="bi bi-building-fill lp-field-icon" aria-hidden="true"></i>
+                                                <select class="form-select" id="qFloorTo" name="floor_to">
+                                                    <option value="" selected>Select floor</option>
+                                                    <option>Ground floor</option>
+                                                    <option>1st floor</option>
+                                                    <option>2nd floor</option>
+                                                    <option>3rd floor</option>
+                                                    <option>4th floor</option>
+                                                    <option>5th floor</option>
+                                                    <option>6th – 10th floor</option>
+                                                    <option>Above 10th floor</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label" for="qFloorTo">Floor (moving to)</label>
-                                        <select class="form-select" id="qFloorTo" name="floor_to">
-                                            <option value="" selected>Select floor</option>
-                                            <option>Ground floor</option>
-                                            <option>1st floor</option>
-                                            <option>2nd floor</option>
-                                            <option>3rd floor</option>
-                                            <option>4th floor</option>
-                                            <option>5th floor</option>
-                                            <option>6th – 10th floor</option>
-                                            <option>Above 10th floor</option>
-                                        </select>
+                                        <div class="col-12">
+                                            <label class="form-label" for="qMessage">Additional details <span class="opt">(optional)</span></label>
+                                            <div class="lp-field lp-field--area">
+                                                <i class="bi bi-chat-left-text lp-field-icon" aria-hidden="true"></i>
+                                                <textarea class="form-control" id="qMessage" name="message" rows="3"
+                                                    placeholder="Lift availability, items list or other requirements"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
+                                </fieldset>
 
-                                    <div class="col-12">
-                                        <label class="form-label" for="qMessage">Additional details (optional)</label>
-                                        <textarea class="form-control" id="qMessage" name="message" rows="3"
-                                            placeholder="Lift availability, items list or other requirements"></textarea>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <button class="btn btn-lp-orange w-100" type="submit">Request My Free
-                                            Quote</button>
-                                        <p class="lp-consent">
-                                            By submitting, you agree that Regular Solution may contact you about this
-                                            enquiry. Your details are handled as described in our
-                                            <a href="privacy.html">privacy policy</a>.
-                                        </p>
-                                    </div>
-                                </div>
+                                <button class="btn lp-submit w-100" type="submit">
+                                    Request My Free Quote<i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                </button>
+                                <p class="lp-consent">
+                                    <i class="bi bi-shield-lock-fill" aria-hidden="true"></i>
+                                    <span>By submitting, you agree that Regular Solution may contact you about this
+                                    enquiry. Your details are handled as described in our
+                                    <a href="privacy.html">privacy policy</a>.</span>
+                                </p>
 
                                 <div class="alert d-none" data-form-message></div>
                             </form>

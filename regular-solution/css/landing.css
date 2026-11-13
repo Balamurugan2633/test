@@ -259,63 +259,460 @@ body.lp {
 .lp-hero-photo {
     display: block;
     width: 100%;
-    max-width: 330px;
+    max-width: 380px;
     height: auto;
     margin-top: auto;
+    padding-top: 24px;
     align-self: center;
 }
 
-/* Quote card */
-.lp-quote {
+/* Hero extras: quote steps + "Prefer to talk?" card ---------------------- */
+.lp-hero-extras {
+    align-self: stretch;
+    max-width: 640px;
+    margin-top: 8px;
+}
+
+.lp-mini-title {
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--lp-blue);
+    margin-bottom: 14px;
+}
+
+.lp-mini-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding: 0;
+    margin: 0 0 18px;
+    list-style: none;
+    counter-reset: mini;
+}
+
+.lp-mini-steps li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     background: var(--white);
     border: 1px solid var(--lp-line);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-lg);
-    padding: 28px;
+    border-radius: 16px;
+    padding: 18px 16px 16px;
+    box-shadow: 0 6px 18px rgba(16, 37, 82, .05);
+    counter-increment: mini;
+}
+
+/* Step number in the corner */
+.lp-mini-steps li::after {
+    content: "0" counter(mini);
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    font-size: .8rem;
+    font-weight: 800;
+    color: #c9d3e6;
+}
+
+.lp-mini-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(29, 78, 216, .09);
+    color: var(--lp-blue);
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+}
+
+.lp-mini-steps strong {
+    font-size: .95rem;
+    color: var(--secondary);
+}
+
+.lp-mini-steps span:not(.lp-mini-icon) {
+    font-size: .82rem;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+.lp-talk {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--lp-navy);
+    border-radius: 16px;
+    padding: 16px 18px;
+    color: var(--white);
+}
+
+.lp-talk-icon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .12);
+    font-size: 1.3rem;
+}
+
+.lp-talk-text {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.lp-talk-text strong {
+    font-size: 1rem;
+}
+
+.lp-talk-text span {
+    font-size: .84rem;
+    color: rgba(255, 255, 255, .75);
+}
+
+.lp-talk-actions {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 8px;
+}
+
+.lp-talk-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+    transition: transform .2s var(--ease), filter .2s var(--ease);
+}
+
+.lp-talk-btn--call {
+    background: var(--lp-orange);
+}
+
+.lp-talk-btn--wa {
+    background: #1fa855;
+}
+
+.lp-talk-btn:hover,
+.lp-talk-btn:focus-visible {
+    color: var(--white);
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+}
+
+/* Narrow desktop: steps as a compact list */
+@media (max-width: 1199.98px) {
+    .lp-mini-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .lp-mini-steps li {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: 14px;
+        align-items: center;
+    }
+
+    .lp-mini-icon {
+        grid-row: span 2;
+        margin-bottom: 0;
+    }
+
+    .lp-talk {
+        flex-wrap: wrap;
+    }
+}
+
+/* Stacked layout (tablet/mobile): go straight from the hero copy to the form. */
+@media (max-width: 991.98px) {
+    .lp-hero-extras {
+        display: none;
+    }
+}
+
+/* Quote card ------------------------------------------------------------
+   Layered card with a brand accent strip, a header with trust perks, and
+   the form split into three numbered steps. Every field has a leading icon
+   that lights up on focus. */
+.lp-quote {
+    --q-field-h: 52px;
+    --q-field-bg: #f7f9fd;
+    --q-field-border: #dfe5f0;
+    --q-radius: 12px;
+
+    position: relative;
+    background: var(--white);
+    border: 1px solid rgba(16, 37, 82, .07);
+    border-radius: 24px;
+    box-shadow:
+        0 1px 2px rgba(16, 37, 82, .04),
+        0 8px 20px rgba(16, 37, 82, .06),
+        0 30px 60px -12px rgba(16, 37, 82, .18);
+    padding: 32px 30px 26px;
+    overflow: hidden;
+}
+
+/* Brand accent strip along the top edge */
+.lp-quote::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 5px;
+    background: linear-gradient(90deg, var(--secondary) 0%, var(--lp-blue) 55%, var(--lp-orange) 100%);
+}
+
+/* Header */
+.lp-quote-head {
+    margin-bottom: 22px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--q-field-border);
+}
+
+.lp-quote-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff3e8;
+    color: #b45309;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 14px;
 }
 
 .lp-quote h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.55rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -.01em;
     color: var(--secondary);
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 .lp-quote-sub {
     color: var(--muted);
-    font-size: .94rem;
-    margin-bottom: 20px;
+    font-size: .92rem;
+    line-height: 1.6;
+    margin-bottom: 14px;
 }
 
-.lp-quote .form-label {
-    font-size: .88rem;
+.lp-quote-perks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-size: .8rem;
     font-weight: 600;
     color: var(--secondary);
-    margin-bottom: 6px;
+}
+
+.lp-quote-perks li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lp-quote-perks i {
+    color: #16a34a;
+    font-size: .9rem;
+}
+
+/* Steps */
+.lp-quote .lp-fs {
+    border: 0;
+    margin: 0 0 22px;
+    padding: 0;
+    min-width: 0;
+}
+
+.lp-quote .lp-qstep {
+    float: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 0 0 14px;
+    padding: 0;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--lp-blue);
+}
+
+/* Hairline after the step title */
+.lp-quote .lp-qstep::after {
+    content: "";
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--q-field-border);
+}
+
+.lp-step-num {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--lp-blue);
+    color: var(--white);
+    font-size: .74rem;
+    letter-spacing: 0;
+    box-shadow: 0 0 0 4px rgba(29, 78, 216, .12);
+}
+
+/* Labels */
+.lp-quote .form-label {
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--secondary);
+    margin-bottom: 7px;
+}
+
+.lp-quote .form-label .req {
+    color: var(--lp-orange);
+}
+
+.lp-quote .form-label .opt {
+    font-weight: 500;
+    color: #8a93a6;
+}
+
+/* Fields with a leading icon */
+.lp-field {
+    position: relative;
+}
+
+.lp-field-icon {
+    position: absolute;
+    left: 15px;
+    top: calc(var(--q-field-h) / 2);
+    transform: translateY(-50%);
+    font-size: 1.02rem;
+    color: #98a2b6;
+    pointer-events: none;
+    z-index: 2;
+    transition: color .2s var(--ease);
+}
+
+.lp-field--area .lp-field-icon {
+    top: 16px;
+    transform: none;
+}
+
+.lp-field:focus-within .lp-field-icon {
+    color: var(--lp-blue);
 }
 
 .lp-quote .form-control,
 .lp-quote .form-select {
-    border: 1px solid var(--lp-line);
-    border-radius: var(--radius-sm);
-    padding: 11px 13px;
-    font-size: .95rem;
+    min-height: var(--q-field-h);
+    background-color: var(--q-field-bg);
+    border: 1.5px solid var(--q-field-border);
+    border-radius: var(--q-radius);
+    padding: 12px 14px;
+    font-size: .94rem;
+    color: var(--secondary);
+    transition: border-color .2s var(--ease), background-color .2s var(--ease), box-shadow .2s var(--ease);
+}
+
+.lp-quote .form-select {
+    padding-right: 38px;
+    background-position: right 14px center;
+    text-overflow: ellipsis;
+}
+
+.lp-field .form-control,
+.lp-field .form-select {
+    padding-left: 43px;
+}
+
+.lp-quote textarea.form-control {
+    min-height: 96px;
+    resize: vertical;
+}
+
+.lp-quote .form-control::placeholder {
+    color: #9aa3b5;
+}
+
+/* Unchosen selects read like placeholders */
+.lp-quote .form-select:has(option[value=""]:checked) {
+    color: #9aa3b5;
+}
+
+.lp-quote .form-select option {
+    color: var(--secondary);
+}
+
+.lp-quote .form-control:hover:not(:focus):not([readonly]),
+.lp-quote .form-select:hover:not(:focus) {
+    border-color: #c5cfe2;
 }
 
 .lp-quote .form-control:focus,
 .lp-quote .form-select:focus {
+    background-color: var(--white);
     border-color: var(--lp-blue);
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, .14);
+    box-shadow: 0 0 0 4px rgba(29, 78, 216, .12);
 }
 
-.lp-consent {
+/* Validation */
+.lp-quote .was-validated .form-control:invalid,
+.lp-quote .was-validated .form-select:invalid {
+    border-color: var(--danger);
+    background-color: #fff7f7;
+}
+
+.lp-quote .was-validated .form-control:invalid:focus,
+.lp-quote .was-validated .form-select:invalid:focus {
+    box-shadow: 0 0 0 4px rgba(239, 45, 45, .12);
+}
+
+.lp-quote .was-validated .lp-field:has(:invalid) .lp-field-icon {
+    color: var(--danger);
+}
+
+/* Valid fields stay neutral (no green ticks on optional fields) */
+.lp-quote .was-validated .form-control:valid,
+.lp-quote .was-validated .form-select:valid {
+    border-color: var(--q-field-border);
+    background-image: none;
+    padding-right: 14px;
+}
+
+.lp-quote .was-validated .form-select:valid {
+    background-image: var(--bs-form-select-bg-img);
+    padding-right: 38px;
+}
+
+.lp-quote .invalid-feedback {
     font-size: .78rem;
-    color: var(--muted);
-    margin: 10px 0 0;
+    margin-top: 6px;
 }
 
-/* The OTP row reuses the same markup hooks as the main site's booking form,
-   so js/script.js wires it up with no extra code. */
+/* The phone input sits inside .otp-row, so show its message explicitly */
+.lp-quote .was-validated .otp-row:has(:invalid) ~ .invalid-feedback {
+    display: block;
+}
+
+/* OTP row: phone field + Send OTP button. The row keeps the same markup
+   hooks as the main site's booking form, so js/script.js wires it up. */
 .lp-quote .otp-row {
     display: flex;
     gap: 8px;
@@ -328,19 +725,23 @@ body.lp {
 
 .lp-quote .btn-otp {
     flex: 0 0 auto;
+    min-height: var(--q-field-h);
     background: var(--secondary);
+    border: 0;
     color: var(--white);
-    font-size: .85rem;
-    font-weight: 600;
-    border-radius: var(--radius-sm);
-    padding: 0 16px;
+    font-size: .84rem;
+    font-weight: 700;
+    border-radius: var(--q-radius);
+    padding: 0 18px;
     white-space: nowrap;
+    transition: background .2s var(--ease), transform .2s var(--ease);
 }
 
 .lp-quote .btn-otp:hover:not(:disabled),
 .lp-quote .btn-otp:focus-visible:not(:disabled) {
     background: var(--lp-blue);
     color: var(--white);
+    transform: translateY(-1px);
 }
 
 .lp-quote .btn-otp:disabled {
@@ -349,14 +750,17 @@ body.lp {
 
 .lp-quote .otp-box {
     margin-top: 12px;
-    padding: 14px;
-    background: var(--lp-soft);
-    border-radius: var(--radius-sm);
+    padding: 16px;
+    background: #f3f7ff;
+    border: 1px dashed #b9cbf5;
+    border-radius: var(--q-radius);
 }
 
 .lp-quote .otp-code {
-    letter-spacing: .4em;
-    font-weight: 600;
+    text-align: center;
+    letter-spacing: .5em;
+    font-size: 1.05rem;
+    font-weight: 700;
 }
 
 .lp-quote .otp-note {
@@ -365,20 +769,122 @@ body.lp {
     color: var(--muted);
 }
 
-.lp-quote .otp-note.is-error {
+/* Same state names as js/script.js (is-ok / is-err / is-test) */
+.lp-quote .otp-note.is-err {
     color: var(--danger);
 }
 
-.lp-quote .otp-note.is-success {
+.lp-quote .otp-note.is-ok {
+    color: #16a34a;
+}
+
+/* Verified number: locked in, green, with a badge in place of the button */
+.lp-quote .otp-row.is-verified .form-control {
+    border-color: #86d4a3;
+    background-color: #f2fbf5;
+    color: #14532d;
+    font-weight: 600;
+}
+
+.lp-quote .otp-row.is-verified .lp-field-icon {
     color: #16a34a;
 }
 
 .lp-quote .otp-verified-tag {
-    display: inline-block;
-    margin-top: 8px;
-    font-size: .8rem;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: var(--q-field-h);
+    padding: 0 14px;
+    font-size: .82rem;
+    font-weight: 700;
+    color: #15803d;
+    background: #e7f7ed;
+    border: 1.5px solid #b6e6c8;
+    border-radius: var(--q-radius);
+    white-space: nowrap;
+}
+
+/* Submit */
+.lp-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 58px;
+    margin-top: 4px;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #f8901f 0%, var(--lp-orange) 45%, var(--lp-orange-dark) 100%);
+    color: var(--white);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: .01em;
+    box-shadow: 0 12px 24px -8px rgba(242, 118, 10, .6), inset 0 1px 0 rgba(255, 255, 255, .25);
+    transition: transform .2s var(--ease), box-shadow .2s var(--ease), filter .2s var(--ease);
+}
+
+.lp-submit i {
+    transition: transform .2s var(--ease);
+}
+
+.lp-submit:hover,
+.lp-submit:focus-visible {
+    color: var(--white);
+    transform: translateY(-2px);
+    filter: saturate(1.08);
+    box-shadow: 0 18px 30px -10px rgba(242, 118, 10, .7), inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+
+.lp-submit:hover i,
+.lp-submit:focus-visible i {
+    transform: translateX(4px);
+}
+
+.lp-submit:active {
+    transform: translateY(0);
+}
+
+.lp-submit:focus-visible {
+    outline: 3px solid rgba(29, 78, 216, .45);
+    outline-offset: 3px;
+}
+
+.lp-submit:disabled {
+    color: var(--white);
+    opacity: .7;
+    transform: none;
+}
+
+.lp-consent {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: .76rem;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 14px 0 0;
+}
+
+.lp-consent i {
     color: #16a34a;
+    font-size: .9rem;
+    line-height: 1.3;
+}
+
+.lp-quote [data-form-message] {
+    margin: 14px 0 0;
+    font-size: .86rem;
+    border-radius: var(--q-radius);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lp-submit,
+    .lp-submit i,
+    .lp-quote .btn-otp,
+    .lp-field-icon {
+        transition: none;
+    }
 }
 
 /* Honeypot: off-screen for people, still filled in by bots. */
@@ -767,7 +1273,8 @@ body.lp .hp-field {
 
 @media (max-width: 575.98px) {
     .lp-quote {
-        padding: 22px 18px;
+        padding: 26px 18px 22px;
+        border-radius: 20px;
     }
 
     .lp-cta {
@@ -935,5 +1442,37 @@ body.lp .hp-field {
 
     .lp-checklist li:last-child:nth-child(odd) {
         width: 100%;
+    }
+}
+
+/* 14. Final polish ======================================================= */
+/* Balanced headings: no single word left alone on the last line. */
+body.lp h1,
+body.lp h2 {
+    text-wrap: balance;
+}
+
+/* Service cards: the "Get a quote" link sits on the bottom of every card,
+   so links line up across a row whatever the text length. */
+.lp-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lp-card > * {
+    max-width: 100%;
+}
+
+.lp-card .lp-card-link {
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+/* Phones: a comfortable 16px side margin instead of 12px. */
+@media (max-width: 575.98px) {
+    body.lp .container {
+        padding-left: 16px;
+        padding-right: 16px;
     }
 }

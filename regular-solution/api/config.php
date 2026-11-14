@@ -59,7 +59,7 @@ return [
     // Every submission is always appended to api/storage/submissions.csv.
     // Set an address here to also receive it by email (needs a working mail
     // setup on the server; XAMPP does not send mail out of the box).
-    'notify_email' => 'ms.balamurugan2633@gmail.com',
+    'notify_email' => 'enquiryregularsolution@gmail.com',
 
     'site_name' => 'Regular Solution',
 

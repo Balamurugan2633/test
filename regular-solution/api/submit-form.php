@@ -89,14 +89,55 @@ if ($handle = @fopen($csv, 'a')) {
     fclose($handle);
 }
 
-// Optionally email it on as well (replies go straight to the visitor).
+// Email every enquiry to the team inbox (config notify_email). Hitting Reply
+// answers the visitor directly when they gave an email address.
 $to = rs_config()['notify_email'];
 if ($to !== '') {
-    $body = '';
-    foreach ($record as $key => $value) {
-        $body .= str_pad(ucfirst($key) . ':', 12) . $value . "\n";
+    $labels = [
+        'received'   => 'Received',
+        'form'       => 'Form',
+        'name'       => 'Name',
+        'phone'      => 'Phone',
+        'email'      => 'Email',
+        'service'    => 'Service',
+        'move_type'  => 'Move type',
+        'house_type' => 'House size',
+        'date'       => 'Preferred date',
+        'time'       => 'Preferred time',
+        'from'       => 'Moving from',
+        'to'         => 'Moving to',
+        'floor_from' => 'Floor (pickup)',
+        'floor_to'   => 'Floor (drop)',
+        'address'    => 'Address',
+        'message'    => 'Details',
+        'ip'         => 'IP address',
+    ];
+    $h    = fn ($v) => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
+    $text = "New enquiry from the website\n\n";
+    $rows = '';
+    foreach ($labels as $key => $label) {
+        $value = trim((string) ($record[$key] ?? ''));
+        if ($value === '') {
+            continue; // skip fields the visitor left empty
+        }
+        $text .= str_pad($label . ':', 17) . $value . "\n";
+        $shown = $h($value);
+        if ($key === 'phone') {
+            $shown = '<a href="tel:' . $h($value) . '" style="color:#1D4ED8;">' . $shown . '</a>';
+        } elseif ($key === 'email') {
+            $shown = '<a href="mailto:' . $h($value) . '" style="color:#1D4ED8;">' . $shown . '</a>';
+        }
+        $rows .= '<tr><td style="padding:9px 12px;border-bottom:1px solid #e4e9f3;color:#5b6478;font-size:14px;width:35%;vertical-align:top;">'
+               . $h($label) . '</td><td style="padding:9px 12px;border-bottom:1px solid #e4e9f3;color:#16294d;font-size:14px;font-weight:600;">'
+               . nl2br($shown) . '</td></tr>';
     }
-    rs_send_mail($to, 'New ' . $record['form'] . ' — ' . $name, $body, '', $mail);
+    $html = '<!doctype html><html><body style="margin:0;padding:20px;background:#f4f7fc;font-family:Segoe UI,Arial,sans-serif;">'
+          . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#fff;border:1px solid #e4e9f3;border-radius:12px;overflow:hidden;">'
+          . '<tr><td style="background:#16294d;color:#fff;padding:18px 20px;font-size:18px;font-weight:700;">New enquiry — ' . $h($name) . '</td></tr>'
+          . '<tr><td style="padding:8px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">' . $rows . '</table></td></tr>'
+          . '</table></body></html>';
+
+    rs_send_mail($to, 'New enquiry: ' . $name . ' — ' . ($record['service'] ?: $record['form']), $text, $html, $mail);
 }
 
 // Thank-you email to the visitor, when they gave an address.

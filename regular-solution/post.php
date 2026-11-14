@@ -49,85 +49,43 @@ $related = array_slice($related, 0, 3);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <!-- Project styles -->
-    <link href="css/style.css?v=20261114c" rel="stylesheet">
+    <link href="css/style.css?v=20261114d" rel="stylesheet">
 </head>
 <body>
 
 <a class="skip-link" href="#main">Skip to main content</a>
 
-<!-- ==================== HEADER : TOP INFORMATION BAR ==================== -->
-<header>
-    <div class="topbar">
-        <div class="container">
-            <div class="row align-items-center g-3">
-                <div class="col-lg-4 d-none d-lg-block">
-                    <a class="brand-logo d-inline-block" href="index.html" aria-label="Regular Solution home">
-                        <img src="images/logo.png" data-site-src="logo" alt="Regular Solution — all home services in Chennai" width="420" height="215">
-                    </a>
-                </div>
+<!-- ==================== ANNOUNCEMENT BAR ==================== -->
+<div class="lp-announce">
+    <div class="container">
+        <span data-site="lp_announce">Moving plans made simpler</span>
+    </div>
+</div>
 
-                <div class="col-lg-8">
-                    <ul class="info-list list-clean">
-                        <li class="info-item">
-                            <span class="info-icon" aria-hidden="true"><i class="bi bi-clock-history"></i></span>
-                            <span class="info-text">
-                                <span class="label">Open Everday</span>
-                                <span class="value" data-site="hours">Mon – Sun, 24 Hhrs</span>
-                            </span>
-                        </li>
-                        <li class="info-item">
-                            <span class="info-icon" aria-hidden="true"><i class="bi bi-geo-alt-fill"></i></span>
-                            <span class="info-text">
-                                <span class="label">Our Location</span>
-                                <span class="value" data-site="location_short">Thiruvanmiyur, Ch‑41</span>
-                            </span>
-                        </li>
-                        <li class="info-item">
-                            <span class="info-icon" aria-hidden="true"><i class="bi bi-headset"></i></span>
-                            <span class="info-text">
-                                <span class="label">Call Us Anytime</span>
-                                <a class="value" href="tel:8925516635" data-site-href="tel:phone" data-site="phone">8925516635</a>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
+<!-- ==================== HEADER ==================== -->
+<header class="lp-header">
+    <div class="container">
+        <a class="lp-brand" href="index.html" aria-label="Regular Solution – Packers and Movers">
+            <img src="images/logo.png" data-site-src="logo" alt="Regular Solution" width="420" height="215">
+        </a>
+
+        <nav class="lp-topnav" aria-label="Main">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="services.html">Services</a>
+            <a href="blog.html" aria-current="page">Blog</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="lp-header-actions">
+            <div class="nav-social">
+                <a href="https://www.facebook.com/profile.php?id=100093007427833" data-site-href="url:facebook" target="_blank" rel="noopener" aria-label="Regular Solution on Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/regularsolution23/" data-site-href="url:instagram" target="_blank" rel="noopener" aria-label="Regular Solution on Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.youtube.com/@RegularSolution" data-site-href="url:youtube" target="_blank" rel="noopener" aria-label="Regular Solution on YouTube"><i class="bi bi-youtube"></i></a>
             </div>
+            <a class="btn btn-lp-orange btn-sm-lp" href="index.html#quote">Free Quote</a>
         </div>
     </div>
-
-    <!-- ==================== NAVIGATION ==================== -->
-    <nav class="navbar navbar-expand-lg main-nav" aria-label="Main navigation">
-        <div class="container">
-            <a class="navbar-brand nav-brand-mobile d-lg-none" href="index.html" aria-label="Regular Solution home">
-                <img src="images/logo.png" data-site-src="logo" alt="Regular Solution" width="420" height="215">
-            </a>
-
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#mainNavbar" aria-controls="mainNavbar"
-                    aria-expanded="false" aria-label="Toggle navigation menu">
-                <i class="bi bi-list fs-3"></i>
-            </button>
-
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav mx-lg-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="services.html">Services</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="blog.html">Blog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-                </ul>
-
-                <div class="d-flex align-items-center flex-wrap gap-3">
-                    <div class="nav-social">
-                        <a href="https://www.facebook.com/profile.php?id=100093007427833" data-site-href="url:facebook" target="_blank" rel="noopener" aria-label="Regular Solution on Facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="https://www.instagram.com/regularsolution23/" data-site-href="url:instagram" target="_blank" rel="noopener" aria-label="Regular Solution on Instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="https://www.youtube.com/@RegularSolution" data-site-href="url:youtube" target="_blank" rel="noopener" aria-label="Regular Solution on YouTube"><i class="bi bi-youtube"></i></a>
-                    </div>
-                    <a class="btn btn-accent" href="#download">Download Now</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 </header>
 
 <!-- ==================== FLOATING ACTION BUTTONS ==================== -->

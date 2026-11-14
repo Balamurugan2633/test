@@ -63,6 +63,26 @@ return [
 
     'site_name' => 'Regular Solution',
 
+    // Public address of the live site, used for links inside emails (never
+    // localhost — Gmail treats links to localhost as suspicious).
+    'site_url' => 'https://regularsolution.in/',
+
+    // --- Outgoing email (thank-you mail to visitors + admin notices) -------
+
+    // Sent through Gmail SMTP so mail really comes "from" this Gmail address
+    // and isn't flagged as spam. 'password' must be a Gmail APP PASSWORD
+    // (Google Account > Security > 2-Step Verification > App passwords),
+    // not the normal Gmail password. Leave it empty to fall back to PHP mail()
+    // (sender no-reply@<domain>, replies go to from_email).
+    'smtp' => [
+        'host'       => 'smtp.gmail.com',
+        'port'       => 465,            // SSL
+        'username'   => 'enquiryregularsolution@gmail.com',
+        'password'   => 'venfotvwucioysrh', // Gmail app password
+        'from_email' => 'enquiryregularsolution@gmail.com',
+        'from_name'  => 'Regular Solution',
+    ],
+
     // --- Admin panel (/admin/) --------------------------------------------
 
     // Used ONLY to create the admin account the first time the panel runs.

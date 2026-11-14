@@ -89,31 +89,25 @@ if ($handle = @fopen($csv, 'a')) {
     fclose($handle);
 }
 
-// Optionally email it on as well.
+// Optionally email it on as well (replies go straight to the visitor).
 $to = rs_config()['notify_email'];
 if ($to !== '') {
     $body = '';
     foreach ($record as $key => $value) {
         $body .= str_pad(ucfirst($key) . ':', 12) . $value . "\n";
     }
-    // Send from an address on this domain (e.g. no-reply@regularsolution.in);
-    // Gmail rejects or spams mail whose sender doesn't match the server.
-    $host    = preg_replace('/^www\./i', '', strtolower(explode(':', $_SERVER['HTTP_HOST'] ?? 'localhost')[0]));
-    $from    = 'no-reply@' . $host;
-    $headers = [
-        'From: ' . rs_config()['site_name'] . ' <' . $from . '>',
-        'Content-Type: text/plain; charset=utf-8',
-    ];
-    if ($mail !== '') {
-        $headers[] = 'Reply-To: ' . str_replace(["\r", "\n"], '', $mail);
+    rs_send_mail($to, 'New ' . $record['form'] . ' — ' . $name, $body, '', $mail);
+}
+
+// Thank-you email to the visitor, when they gave an address.
+if ($mail !== '') {
+    require_once __DIR__ . '/thank-you-mail.php';
+    try {
+        [$subject, $text, $html] = rs_thank_you_mail($record);
+        rs_send_mail($mail, $subject, $text, $html);
+    } catch (Throwable $e) {
+        rs_log('mail.log', 'thank-you mail not sent: ' . $e->getMessage());
     }
-    @mail(
-        $to,
-        '=?UTF-8?B?' . base64_encode('New ' . $record['form'] . ' — ' . $name) . '?=',
-        $body,
-        implode("\r\n", $headers),
-        '-f' . $from
-    );
 }
 
 // One verification covers one submission.

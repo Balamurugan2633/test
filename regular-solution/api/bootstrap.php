@@ -238,3 +238,167 @@ function rs_http_post(string $url, array $fields, string $basicAuth = ''): array
     }
     return [true, ''];
 }
+
+/**
+ * Send an email. Plain text always; pass $html to send a multipart message
+ * (HTML with a plain-text fallback). Returns true when it was accepted.
+ *
+ * With config 'smtp' password set, mail goes through that SMTP server (Gmail)
+ * and really comes from smtp.from_email. Without it, PHP mail() is used with a
+ * no-reply@<this domain> sender (a Gmail "From" sent by another server is
+ * rejected/spammed by Gmail) and replies directed to smtp.from_email.
+ * Failures are written to storage/mail.log.
+ */
+function rs_send_mail(string $to, string $subject, string $text, string $html = '', string $replyTo = ''): bool
+{
+    $clean = fn (string $v): string => trim(str_replace(["\r", "\n"], '', $v));
+    $to    = $clean($to);
+    if (!filter_var($to, FILTER_VALIDATE_EMAIL)) {
+        return false;
+    }
+
+    $smtp     = rs_config()['smtp'] ?? [];
+    $fromMail = $clean((string) ($smtp['from_email'] ?? ''));
+    $fromName = $clean((string) ($smtp['from_name'] ?? (rs_config()['site_name'] ?? 'Regular Solution')));
+    $useSmtp  = ($smtp['password'] ?? '') !== '' && filter_var($fromMail, FILTER_VALIDATE_EMAIL);
+
+    if (!$useSmtp) {
+        $host = preg_replace('/^www\./i', '', strtolower(explode(':', $_SERVER['HTTP_HOST'] ?? 'localhost')[0]));
+        if ($replyTo === '' && $fromMail !== '') {
+            $replyTo = $fromMail;
+        }
+        $fromMail = 'no-reply@' . $host;
+    }
+
+    $headers = [
+        'Date: ' . date('r'),
+        'From: =?UTF-8?B?' . base64_encode($fromName) . '?= <' . $fromMail . '>',
+        'MIME-Version: 1.0',
+    ];
+    $replyTo = $clean($replyTo);
+    if ($replyTo !== '' && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+        $headers[] = 'Reply-To: ' . $replyTo;
+    }
+
+    if ($html === '') {
+        $headers[] = 'Content-Type: text/plain; charset=utf-8';
+        $headers[] = 'Content-Transfer-Encoding: base64';
+        $body = chunk_split(base64_encode($text));
+    } else {
+        $boundary  = 'rs_' . bin2hex(random_bytes(12));
+        $headers[] = 'Content-Type: multipart/alternative; boundary="' . $boundary . '"';
+        $body = "--{$boundary}\r\n"
+              . "Content-Type: text/plain; charset=utf-8\r\n"
+              . "Content-Transfer-Encoding: base64\r\n\r\n"
+              . chunk_split(base64_encode($text))
+              . "--{$boundary}\r\n"
+              . "Content-Type: text/html; charset=utf-8\r\n"
+              . "Content-Transfer-Encoding: base64\r\n\r\n"
+              . chunk_split(base64_encode($html))
+              . "--{$boundary}--\r\n";
+    }
+    $encSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+
+    if ($useSmtp) {
+        [$ok, $err] = rs_smtp_send($smtp, $fromMail, $to, $encSubject, $headers, $body);
+        if (!$ok) {
+            rs_log('mail.log', "SMTP failed: to={$to} subject={$subject} error={$err}");
+        }
+        return $ok;
+    }
+
+    $ok = @mail($to, $encSubject, $body, implode("\r\n", $headers), '-f' . $fromMail);
+    if (!$ok) {
+        rs_log('mail.log', "mail() failed: to={$to} subject={$subject}");
+    }
+    return $ok;
+}
+
+/**
+ * Minimal SMTP client (implicit SSL on 465, or STARTTLS on 587) with AUTH LOGIN.
+ * Returns [bool $sent, string $error].
+ */
+function rs_smtp_send(array $smtp, string $from, string $to, string $subject, array $headers, string $body): array
+{
+    $host = (string) ($smtp['host'] ?? 'smtp.gmail.com');
+    $port = (int) ($smtp['port'] ?? 465);
+    $ssl  = $port === 465;
+
+    $errno = 0;
+    $errstr = '';
+    $fp = @stream_socket_client(($ssl ? 'ssl://' : 'tcp://') . $host . ':' . $port, $errno, $errstr, 15);
+    if (!$fp) {
+        return [false, "connect: {$errstr} ({$errno})"];
+    }
+    stream_set_timeout($fp, 15);
+
+    $read = function () use ($fp): string {
+        $data = '';
+        while (($line = fgets($fp, 515)) !== false) {
+            $data .= $line;
+            if (strlen($line) < 4 || $line[3] === ' ') {
+                break;
+            }
+        }
+        return $data;
+    };
+    $cmd = function (string $line, array $expect) use ($fp, $read): array {
+        if ($line !== '') {
+            fwrite($fp, $line . "\r\n");
+        }
+        $reply = $read();
+        $ok    = in_array((int) substr($reply, 0, 3), $expect, true);
+        return [$ok, trim($reply)];
+    };
+
+    $ehlo  = 'EHLO ' . (gethostname() ?: 'localhost');
+    $steps = [['', [220]], [$ehlo, [250]]];
+    if (!$ssl) {
+        $steps[] = ['STARTTLS', [220]];
+    }
+    foreach ($steps as $i => [$line, $expect]) {
+        [$ok, $reply] = $cmd($line, $expect);
+        if (!$ok) {
+            fclose($fp);
+            return [false, $reply];
+        }
+    }
+    if (!$ssl) {
+        if (!stream_socket_enable_crypto($fp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+            fclose($fp);
+            return [false, 'STARTTLS failed'];
+        }
+        [$ok, $reply] = $cmd($ehlo, [250]);
+        if (!$ok) {
+            fclose($fp);
+            return [false, $reply];
+        }
+    }
+
+    // Normalise line endings and dot-stuff the message for the DATA phase.
+    $message = implode("\r\n", array_merge(["To: <{$to}>", "Subject: {$subject}"], $headers))
+             . "\r\n\r\n" . $body;
+    $message = preg_replace("/\r?\n/", "\r\n", $message);
+    $message = preg_replace('/^\./m', '..', $message);
+
+    $steps = [
+        ['AUTH LOGIN', [334]],
+        [base64_encode((string) ($smtp['username'] ?? '')), [334]],
+        [base64_encode(str_replace(' ', '', (string) $smtp['password'])), [235]],
+        ["MAIL FROM:<{$from}>", [250]],
+        ["RCPT TO:<{$to}>", [250, 251]],
+        ['DATA', [354]],
+        [$message . "\r\n.", [250]],
+    ];
+    foreach ($steps as [$line, $expect]) {
+        [$ok, $reply] = $cmd($line, $expect);
+        if (!$ok) {
+            fwrite($fp, "QUIT\r\n");
+            fclose($fp);
+            return [false, $reply];
+        }
+    }
+    fwrite($fp, "QUIT\r\n");
+    fclose($fp);
+    return [true, ''];
+}
